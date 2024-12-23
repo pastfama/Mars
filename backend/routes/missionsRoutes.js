@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const logger = require('../logger');
+const logger = require('../utils/logger');
 const Mission = require('../models/missionModel'); // Assuming you have a Mission model
 
 // POST: Create a new mission

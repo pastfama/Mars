@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const logger = require('../logger');
+const logger = require('../utils/logger');
 const Colony = require('../models/colonyModel'); // Assuming you have a Colony model
 
 // POST: Create a new colony

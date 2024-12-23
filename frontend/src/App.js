@@ -1,12 +1,24 @@
 import React from 'react';
-import MainMenu from './MainMenu';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { PlayerProvider } from './context/PlayerContext';
+import HomePage from './pages/HomePage';
+import GamePage from './pages/GamePage';
+import PlayerPage from './pages/PlayerPage';
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <MainMenu />
-    </div>
+    <PlayerProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/game" element={<GamePage />} />
+            <Route path="/player" element={<PlayerPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </PlayerProvider>
   );
-};
+}
 
 export default App;

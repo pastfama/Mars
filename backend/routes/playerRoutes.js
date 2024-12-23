@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const logger = require('../logger');
+const logger = require('../utils/logger');
 const Player = require('../models/playerModel'); // Assuming you have a Player model set up
 
 // POST: Create a new player

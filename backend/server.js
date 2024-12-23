@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const logger = require('./logger'); // Import the logger
+const logger = require('./utils/logger'); // Import the logger
 const playerRoutes = require('./routes/playerRoutes'); // Import player routes
 const gameRoutes = require('./routes/gameRoutes'); // Import game-related routes
 const colonyRoutes = require('./routes/colonyRoutes'); // Import colony routes

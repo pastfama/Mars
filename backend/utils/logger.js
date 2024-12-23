@@ -3,7 +3,7 @@ const winston = require('winston');
 // Set up logging formats
 const logFormat = winston.format.printf(({ timestamp, level, message, ...metadata }) => {
   let log = `${timestamp} [${level}]: ${message} `;
-  if (metadata) {
+  if (Object.keys(metadata).length) {
     log += JSON.stringify(metadata);
   }
   return log;
@@ -14,8 +14,7 @@ const logger = winston.createLogger({
   level: 'info', // default log level, you can adjust based on your needs
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json(),
-    logFormat
+    logFormat // Use only the custom format here to avoid conflict with JSON format
   ),
   transports: [
     // Console logging for development
@@ -42,11 +41,28 @@ const logger = winston.createLogger({
   ],
 });
 
-// Example for logging different types of logs
-logger.debug('This is a debug message');
-logger.info('This is an info message');
-logger.warn('This is a warning');
-logger.error('This is an error message');
+// Define custom log methods for specific log levels
+logger.logDebug = (message, metadata) => {
+  logger.debug(message, metadata);
+};
+
+logger.logInfo = (message, metadata) => {
+  logger.info(message, metadata);
+};
+
+logger.logWarn = (message, metadata) => {
+  logger.warn(message, metadata);
+};
+
+logger.logError = (message, metadata) => {
+  logger.error(message, metadata);
+};
+
+// Example usage for logging different types of logs
+logger.logDebug('This is a debug message');
+logger.logInfo('This is an info message');
+logger.logWarn('This is a warning');
+logger.logError('This is an error message');
 
 // Ensure uncaught exceptions and unhandled promise rejections are logged
 process.on('unhandledRejection', (ex) => {
@@ -54,7 +70,7 @@ process.on('unhandledRejection', (ex) => {
 });
 
 process.on('uncaughtException', (ex) => {
-  logger.error('Uncaught Exception: ', ex);
+  logger.logError('Uncaught Exception: ', ex);
   process.exit(1); // Exit the process after logging the error
 });
 
