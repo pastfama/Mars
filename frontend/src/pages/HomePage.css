@@ -1,0 +1,49 @@
+.homepage-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .content {
+    text-align: center;
+    color: white;
+  }
+  
+  .input {
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    width: 100%;
+    max-width: 300px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;  /* Stack buttons vertically */
+    align-items: center;  /* Center buttons horizontally */
+    width: 100%;
+    max-width: 300px; /* Ensure buttons are the same width as input */
+    gap: 20px;  /* Space between buttons */
+  }
+  
+  .button {
+    padding: 15px;
+    font-size: 18px;
+    width: 100%; /* Make the buttons fill the container's width */
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #45a049;
+  }
+  
