@@ -62,7 +62,9 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#2e3a47',  // Dark blue background, Mars-themed
+    backgroundImage: 'url(/images/background.webp)', // Background image
+    backgroundSize: 'cover', // Ensure the image covers the whole screen
+    backgroundPosition: 'center', // Center the image
     color: '#fff',
     fontFamily: 'Arial, sans-serif',
   },
