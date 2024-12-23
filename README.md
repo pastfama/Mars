@@ -2,9 +2,14 @@ The next step after setting up the frontend with core features is to focus on bu
 
 
 WORKING ON THIS NOW 
+
+
+Defining schemas for DB
+
+
+
+
 vvvvvvvvvvvvvvvvvvvv
-
-
 
 1. Design the Backend API
 
@@ -20,8 +25,6 @@ vvvvvvvvvvvvvvvvvvvv
         Technology/Research Progress
         Events/Challenges (random events, progress tracking)
         Game State (current game phase, ongoing missions)
-
-
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
