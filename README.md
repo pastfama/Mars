@@ -44,13 +44,6 @@ completed
 
 completed
 
-
-
-
-
-
-vvvvvvvvvvvvvvvvvvvv
-
 1. Design the Backend API
 
     Define the Endpoints: You'll need endpoints to handle actions like starting a new game, saving player progress, and managing resources.
@@ -64,12 +57,7 @@ vvvvvvvvvvvvvvvvvvvv
         Colony Information (resources like oxygen, food, water, etc.)
         Technology/Research Progress
         Events/Challenges (random events, progress tracking)
-        Game State (current game phase, ongoing missions)
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
+        Game State (current game phase, ongoing missions
 
 
 
@@ -98,11 +86,28 @@ vvvvvvvvvvvvvvvvvvvv
     Handle Random Events (/events):
         Generate random events (e.g., technical issues, discoveries) and update the game state based on those events.
 
+
+
+
+
+
+WORKING ON THIS NOW
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+
+
+
+
 4. Set Up Player Data and Resource Management
 
     Player Model: Define a schema for player data that includes the player’s name, skills, health, and other attributes.
     Colony Model: Define a schema for the colony, including resources (oxygen, food, etc.) and infrastructure (labs, solar panels).
     Resource Management: Implement logic for resource consumption and generation (e.g., producing oxygen, using food, receiving supplies from Earth).
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 5. Connect Backend to Frontend
 
