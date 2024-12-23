@@ -1,5 +1,7 @@
+require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose'); // Mongoose for MongoDB connection
 const logger = require('./utils/logger'); // Import the logger
 const playerRoutes = require('./routes/playerRoutes'); // Import player routes
 const gameRoutes = require('./routes/gameRoutes'); // Import game-related routes
@@ -26,6 +28,17 @@ app.use((req, res, next) => {
   });
   next();
 });
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    logger.logDebug('Connected to MongoDB');
+  })
+  .catch((error) => {
+    logger.logError('Error connecting to MongoDB', error);
+    process.exit(1); // Exit the process if unable to connect
+  });
 
 // Home route
 app.get('/', (req, res) => {

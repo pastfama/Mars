@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import backgroundImage from '../assets/images/background.webp'; // Import the image directly
-
+import { useNavigate } from 'react-router-dom';
+import backgroundImage from '../assets/images/background.webp'; // Import the background image
 import './HomePage.css'; // Import the CSS for styling
 
 const HomePage = () => {
   const [playerName, setPlayerName] = useState('');
+  const navigate = useNavigate(); // Move useNavigate hook to the top level of the component
 
   // Handle the start of a new game
   const startNewGame = async () => {
     if (!playerName) {
-      alert("Please enter your name!");
+      alert("Please enter your name!"); // Prompt if the player hasn't entered their name
       return;
     }
-
+  
     try {
-      const response = await axios.post('http://localhost:5000/new-game', { playerName });
-      alert(response.data.message);
+      const response = await axios.post('http://localhost:5000/game/new-game', { playerName });
+      alert(response.data.message); // Display success message
+  
+      // Redirect to the GamePage after starting the game
+      navigate('/game-page');
     } catch (error) {
       console.error('Error starting new game:', error);
+      alert('There was an error starting the game. Please try again.');
     }
   };
 
