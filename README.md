@@ -7,12 +7,22 @@ WORKING ON THIS NOW
 Defining schemas for DB
 Summary:
 
-    Player: For individual player data (skills, health, happiness, inventory, etc.).
-    Colony: Tracks the overall state of the colony (resources, infrastructure, etc.).
-    Event: Stores random events or challenges the colony faces.
-    Research: Tracks research progress and technology upgrades.
-    Mission: Stores details about missions or objectives.
-    Task/Action: Stores individual tasks or actions players are working on.
+Player: For individual player data (skills, health, happiness, inventory, etc.).
+completed
+
+Colony: Tracks the overall state of the colony (resources, infrastructure, etc.).
+c
+
+Event: Stores random events or challenges the colony faces.
+c
+
+ Research: Tracks research progress and technology upgrades.
+c
+ 
+ Mission: Stores details about missions or objectives.
+ c
+ Task/Action: Stores individual tasks or actions players are working on.
+ c
 
 These schemas will help manage different aspects of the game, allowing the colony to grow and evolve as players take actions and interact with various systems in the game.
 
