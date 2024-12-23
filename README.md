@@ -22,7 +22,12 @@ vvvvvvvvvvvvvvvvvvvv
         Game State (current game phase, ongoing missions)
 
 
+Next Steps:
 
+    Set up your backend with the folder structure, creating the necessary models, controllers, and routes for game logic.
+    Set up your frontend to interact with your backend API, structuring components for the game interface.
+    Make sure both projects are well-organized and that common utilities (like API services) are shared between components.
+    Start with basic features (game initialization, resource management) and build out new features step by step.
 
 
 
