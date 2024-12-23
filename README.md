@@ -21,7 +21,6 @@ vvvvvvvvvvvvvvvvvvvv
         Events/Challenges (random events, progress tracking)
         Game State (current game phase, ongoing missions)
 
-
 Next Steps:
 
     Set up your backend with the folder structure, creating the necessary models, controllers, and routes for game logic.
