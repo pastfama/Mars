@@ -2,9 +2,54 @@ The next step after setting up the frontend with core features is to focus on bu
 
 
 WORKING ON THIS NOW 
+
+
+Defining schemas for DB
+Summary:
+
+Player: For individual player data (skills, health, happiness, inventory, etc.).
+completed
+
+Colony: Tracks the overall state of the colony (resources, infrastructure, etc.).
+c
+
+Event: Stores random events or challenges the colony faces.
+c
+
+ Research: Tracks research progress and technology upgrades.
+c
+ 
+ Mission: Stores details about missions or objectives.
+ c
+ Task/Action: Stores individual tasks or actions players are working on.
+ c
+
+These schemas will help manage different aspects of the game, allowing the colony to grow and evolve as players take actions and interact with various systems in the game.
+
+
+1. Set Up Routes
+
+Create the necessary routes to interact with these models. For example, you'll need endpoints for managing players, colonies, events, research, tasks, and missions.
+
+Example Structure for Routes:
+
+   Players Routes (/players): Create, update, delete players, and retrieve player details.
+completed
+
+   Colony Routes (/colony): Create a new colony, update resources, check colony status, etc.
+   
+   Events Routes (/events): Create, list, and resolve events.
+   Research Routes (/research): Start, update progress, or complete research.
+   Missions Routes (/missions): Create, assign, and complete missions.
+
+completed
+
+
+
+
+
+
 vvvvvvvvvvvvvvvvvvvv
-
-
 
 1. Design the Backend API
 
@@ -20,8 +65,6 @@ vvvvvvvvvvvvvvvvvvvv
         Technology/Research Progress
         Events/Challenges (random events, progress tracking)
         Game State (current game phase, ongoing missions)
-
-
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
