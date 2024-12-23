@@ -1,4 +1,11 @@
 The next step after setting up the frontend with core features is to focus on building the backend API that will handle game data, resource management, and player state. Here’s how you can break it down:
+
+
+WORKING ON THIS NOW 
+vvvvvvvvvvvvvvvvvvvv
+
+
+
 1. Design the Backend API
 
     Define the Endpoints: You'll need endpoints to handle actions like starting a new game, saving player progress, and managing resources.
@@ -13,6 +20,21 @@ The next step after setting up the frontend with core features is to focus on bu
         Technology/Research Progress
         Events/Challenges (random events, progress tracking)
         Game State (current game phase, ongoing missions)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 2. Set Up the Backend (Node.js with Express)
 
