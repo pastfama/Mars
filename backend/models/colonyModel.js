@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');  // Import UUID generator
 
 const colonySchema = new mongoose.Schema({
+  colonyId: { 
+    type: String, 
+    default: uuidv4, // Automatically generate a UUID for each new colony
+    unique: true, // Ensure the colonyId is unique
+  },
   name: {
     type: String,
     required: true,

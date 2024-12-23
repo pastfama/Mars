@@ -1,57 +1,58 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import backgroundImage from '../assets/images/newborn.webp'; // Import the image directly
+import { useNavigate } from 'react-router-dom';
+import newbornImage from '../assets/images/newborn.webp'; // Import the new background image
+import './NewColonyPage.css'; // Create a new CSS for this page
 
-import './HomePage.css'; // Import the CSS for styling
+const NewColonyPage = () => {
+  const navigate = useNavigate(); // Use navigate for redirection
 
-const HomePage = () => {
-  const [playerName, setPlayerName] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
 
-  // Handle the start of a new game
-  const startNewGame = async () => {
-    if (!playerName) {
-      alert("Please enter your name!");
-      return;
-    }
+  // Handle colony creation based on size
+  const createColony = async (size) => {
+    setIsLoading(true); // Set loading state
 
     try {
-      const response = await axios.post('http://localhost:5000/new-game', { playerName });
-      alert(response.data.message);
+      // You can replace this URL with the actual endpoint for colony creation
+      const response = await axios.post(`http://localhost:5000/colony/create`, { size });
+      alert(response.data.message); // Show success message
+
+      // Redirect to the game page (or wherever appropriate after colony creation)
+      navigate('/game-page');
     } catch (error) {
-      console.error('Error starting new game:', error);
+      console.error('Error creating colony:', error);
+      alert('There was an error creating the colony. Please try again.');
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
-  };
-
-  // Handle load of an existing game
-  const loadGame = () => {
-    alert("Load game functionality coming soon!");
-  };
-
-  // Handle settings (this can be expanded later)
-  const goToSettings = () => {
-    alert("Settings functionality coming soon!");
   };
 
   return (
-    <div className="homepage-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="new-colony-page" style={{ backgroundImage: `url(${newbornImage})` }}>
       <div className="content">
-        <h1 className="title">Mars: A New Hope</h1>
-        <input
-          className="input"
-          type="text"
-          placeholder="Enter your name"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-        />
+        <h1 className="title">Select Colony Size</h1>
         <div className="button-container">
-          <button className="button" onClick={startNewGame}>
-            Start New Game
+          <button
+            className="colony-button small"
+            onClick={() => createColony('small')}
+            disabled={isLoading}
+          >
+            Small (5-10)
           </button>
-          <button className="button" onClick={loadGame}>
-            Load Game
+          <button
+            className="colony-button medium"
+            onClick={() => createColony('medium')}
+            disabled={isLoading}
+          >
+            Medium (20-50)
           </button>
-          <button className="button" onClick={goToSettings}>
-            Settings
+          <button
+            className="colony-button large"
+            onClick={() => createColony('large')}
+            disabled={isLoading}
+          >
+            Large (100-500)
           </button>
         </div>
       </div>
@@ -59,4 +60,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default NewColonyPage;

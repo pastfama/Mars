@@ -1,46 +1,51 @@
-.new-colony-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f5f5f5;
+/* NewColonyPage.css */
+.new-colony-page {
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
   }
   
-  h1 {
+  .content {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Add slight transparency to the background */
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .title {
     font-size: 2rem;
     margin-bottom: 20px;
   }
   
-  .colony-size-options {
+  .button-container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-around;
+    gap: 20px;
   }
   
-  .option-button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    border: none;
-    background-color: #4CAF50;
+  .colony-button {
+    background-color: #ff6200;
     color: white;
-    cursor: pointer;
-  }
-  
-  .option-button.selected {
-    background-color: #45a049;
-  }
-  
-  .action-buttons {
-    margin-top: 20px;
-  }
-  
-  .confirm-button {
-    padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #007bff;
-    color: white;
+    padding: 10px 20px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
+    width: 200px;
+  }
+  
+  .colony-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+  }
+  
+  .colony-button:hover:not(:disabled) {
+    background-color: #ff4500;
   }
   
