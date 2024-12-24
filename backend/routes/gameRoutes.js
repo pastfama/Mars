@@ -1,15 +1,10 @@
-// routes/gameRoutes.js
 const express = require('express');
 const router = express.Router();
-const gameController = require('../controllers/gameController');
+const { createGame, getAllGames, getGame, deleteGame } = require('../controllers/gameController'); 
 
-// GET: Fetch the current game state
-router.get('/game-state', gameController.getGameState);
-
-// POST: Create a new game (start a new game)
-router.post('/new-game', gameController.startNewGame);
-
-// POST: Save the current game state
-router.post('/save-game', gameController.saveGame);
+router.post('/', createGame); // Route to create a new game
+router.get('/', getAllGames);  // Route to get all games
+router.get('/:id', getGame);   // Route to get a specific game by ID
+router.delete('/:id', deleteGame); // Route to delete a game
 
 module.exports = router;

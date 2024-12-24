@@ -1,20 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import GamePage from './pages/GamePage';
-import NewColonyPage from './pages/NewColonyPage'; // Import the NewColonyPage component
+import Homepage from './components/HomePage';
+import GamePage from './components/GamePage';
+import CreateGamePage from './components/CreateGamePage';
+import GameManagementPage from './components/GameManagementPage';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/game/:gameId" element={<GamePage />} />
-        <Route path="/game-page" element={<GamePage />} />
-        <Route path="/new-colony" element={<NewColonyPage />} /> {/* Add route for NewColonyPage */}
+        <Route path="/" element={<Homepage />} />
+        <Route path="/game/:id" element={<GamePage />} />
+        <Route path="/create-game" element={<CreateGamePage />} />
+        <Route path="/game-management" element={<GameManagementPage />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;

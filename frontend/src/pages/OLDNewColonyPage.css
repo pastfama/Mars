@@ -1,0 +1,49 @@
+.new-colony-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .content {
+    text-align: center;
+    color: white;
+  }
+  
+  .title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
+  
+  .button:hover {
+    background-color: #45a049;
+  }
+  
+  .button.disabled {
+    background-color: #ccc; /* Grey */
+    cursor: not-allowed;
+  }
+  
+  .button:disabled {
+    opacity: 0.6;
+  }
+  

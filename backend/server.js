@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Log every incoming request for debugging
+// Request logging middleware for debugging
 app.use((req, res, next) => {
   logger.logDebug('Incoming Request', {
     method: req.method,
@@ -29,16 +29,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
+// MongoDB connection
+const connectToDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     logger.logDebug('Connected to MongoDB');
-  })
-  .catch((error) => {
+  } catch (error) {
     logger.logError('Error connecting to MongoDB', error);
-    process.exit(1); // Exit the process if unable to connect
-  });
+    process.exit(1); // Exit if the database connection fails
+  }
+};
+
+// Establish database connection
+connectToDB();
 
 // Home route
 app.get('/', (req, res) => {
@@ -46,42 +49,27 @@ app.get('/', (req, res) => {
   res.send('Mars: A New Hope Backend');
 });
 
-// Player routes
-app.use('/players', playerRoutes);
+// Register routes
+app.use('/game', gameRoutes); // Ensure the /game route is correctly registered
 
-// Game routes
-app.use('/game', gameRoutes);
-
-// Colony routes
-app.use('/colony', colonyRoutes);
-
-// Events routes
-app.use('/events', eventsRoutes);
-
-// Research routes
-app.use('/research', researchRoutes);
-
-// Missions routes
-app.use('/missions', missionsRoutes);
-
-// Handle 404 - Not Found
+// Handle 404 - Route not found
 app.use((req, res, next) => {
   logger.logDebug('404 - Not Found', { url: req.originalUrl });
   res.status(404).json({ error: 'Not Found' });
 });
 
-// Error handling middleware
+// Global error handling middleware
 app.use((err, req, res, next) => {
   logger.logError(err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// Start the server
+// Start server and listen for incoming requests
 const server = app.listen(PORT, () => {
   logger.logDebug(`Server running on http://localhost:${PORT}`);
 });
 
-// Graceful shutdown
+// Graceful shutdown on process interrupt (Ctrl+C)
 process.on('SIGINT', () => {
   console.log('Gracefully shutting down');
   server.close(() => {

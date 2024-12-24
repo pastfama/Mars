@@ -1,115 +1,95 @@
 const Colony = require('../models/colonyModel');
-const logger = require('../utils/logger');
-
-// Utility function to validate resources
-const validateResources = (resources) => {
-  const { oxygen, food, water, power } = resources;
-  return (
-    typeof oxygen === 'number' &&
-    oxygen >= 0 &&
-    typeof food === 'number' &&
-    food >= 0 &&
-    typeof water === 'number' &&
-    water >= 0 &&
-    typeof power === 'number' &&
-    power >= 0
-  );
-};
+const Player = require('../models/playerModel'); // Assuming you have a Player model
 
 // Create a new colony
 const createColony = async (req, res) => {
-  const { name, resources } = req.body;
-
-  // Log the incoming request
-  logger.logDebug('Received request to create a new colony', { name, resources });
-
-  // Check if required fields are provided
-  if (!name || !resources) {
-    return res.status(400).json({ error: 'Name and resources are required' });
-  }
-
-  // Validate resources
-  if (!validateResources(resources)) {
-    return res.status(400).json({ error: 'Invalid resources data' });
-  }
+  const { name, gameId, playerName } = req.body;
 
   try {
+    // Check if player exists, if not create a new player
+    let player = await Player.findOne({ playerName });
+    if (!player) {
+      player = new Player({ playerName });
+      await player.save();
+    }
+
+    // Create a new colony and associate it with the player
     const newColony = new Colony({
       name,
-      resources,
+      gameId,
+      players: [{ player: player._id, role: 'colonist' }],
     });
 
+    // Save the colony
     await newColony.save();
-
-    logger.logDebug('New colony created successfully', { colonyId: newColony._id });
-
-    res.status(201).json({ message: 'Colony created successfully', colony: newColony });
+    res.status(201).json({ colony: newColony });
   } catch (error) {
-    logger.logError('Error creating colony', error);
-    res.status(500).json({ error: 'Failed to create colony' });
+    console.error('Error creating colony:', error);
+    res.status(500).json({ message: 'Failed to create colony' });
   }
 };
 
-// Get colony status
-const getColonyStatus = async (req, res) => {
+// Get a colony by ID
+const getColony = async (req, res) => {
   const { id } = req.params;
+  
+  try {
+    const colony = await Colony.findById(id).populate('players.player').populate('leader');
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+    res.status(200).json({ colony });
+  } catch (error) {
+    console.error('Error retrieving colony:', error);
+    res.status(500).json({ message: 'Failed to retrieve colony' });
+  }
+};
 
-  // Log the incoming request
-  logger.logDebug('Received request to get colony status', { colonyId: id });
+// Update a colony by ID
+const updateColony = async (req, res) => {
+  const { id } = req.params;
+  const { name, gameId, resources, infrastructure } = req.body;
 
   try {
     const colony = await Colony.findById(id);
-
     if (!colony) {
-      logger.logDebug('Colony not found', { colonyId: id });
-      return res.status(404).json({ error: 'Colony not found' });
+      return res.status(404).json({ message: 'Colony not found' });
     }
 
-    logger.logDebug('Colony status fetched successfully', { colonyId: id });
+    // Update colony fields
+    if (name) colony.name = name;
+    if (gameId) colony.gameId = gameId;
+    if (resources) colony.resources = resources;
+    if (infrastructure) colony.infrastructure = infrastructure;
 
-    res.status(200).json(colony);
+    // Save the updated colony
+    await colony.save();
+    res.status(200).json({ colony });
   } catch (error) {
-    logger.logError('Error fetching colony status', error);
-    res.status(500).json({ error: 'Failed to fetch colony status' });
+    console.error('Error updating colony:', error);
+    res.status(500).json({ message: 'Failed to update colony' });
   }
 };
 
-// Update colony resources
-const updateColonyResources = async (req, res) => {
+// Delete a colony by ID
+const deleteColony = async (req, res) => {
   const { id } = req.params;
-  const { resources } = req.body;
-
-  // Log the incoming request
-  logger.logDebug('Received request to update colony resources', { colonyId: id, resources });
-
-  // Validate resources
-  if (!validateResources(resources)) {
-    return res.status(400).json({ error: 'Invalid resources data' });
-  }
 
   try {
-    const updatedColony = await Colony.findByIdAndUpdate(
-      id,
-      { resources },
-      { new: true }
-    );
-
-    if (!updatedColony) {
-      logger.logDebug('Colony not found for update', { colonyId: id });
-      return res.status(404).json({ error: 'Colony not found' });
+    const colony = await Colony.findByIdAndDelete(id);
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
     }
-
-    logger.logDebug('Colony resources updated successfully', { colonyId: updatedColony._id });
-
-    res.status(200).json({ message: 'Colony resources updated successfully', colony: updatedColony });
+    res.status(200).json({ message: 'Colony deleted successfully' });
   } catch (error) {
-    logger.logError('Error updating colony resources', error);
-    res.status(500).json({ error: 'Failed to update colony resources' });
+    console.error('Error deleting colony:', error);
+    res.status(500).json({ message: 'Failed to delete colony' });
   }
 };
 
 module.exports = {
   createColony,
-  getColonyStatus,
-  updateColonyResources,
+  getColony,
+  updateColony,
+  deleteColony,
 };

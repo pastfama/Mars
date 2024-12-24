@@ -23,7 +23,7 @@ const HomePage = () => {
       alert(response.data.message); // Display success message
 
       // Redirect to the GamePage after starting the game
-      navigate('/new-colony');
+      navigate('/game-page');
     } catch (error) {
       console.error('Error starting new game:', error);
       alert('There was an error starting the game. Please try again.');

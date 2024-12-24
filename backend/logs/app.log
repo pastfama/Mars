@@ -19,3 +19,122 @@
 2024-12-23T08:54:24.973Z [info]: This is an info message 
 2024-12-23T08:54:24.974Z [warn]: This is a warning 
 2024-12-23T08:54:24.974Z [error]: This is an error message 
+2024-12-23T21:06:26.133Z [info]: This is an info message 
+2024-12-23T21:06:26.134Z [warn]: This is a warning 
+2024-12-23T21:06:26.134Z [error]: This is an error message 
+2024-12-23T21:13:34.735Z [info]: This is an info message 
+2024-12-23T21:13:34.735Z [warn]: This is a warning 
+2024-12-23T21:13:34.736Z [error]: This is an error message 
+2024-12-23T21:16:15.907Z [info]: This is an info message 
+2024-12-23T21:16:15.908Z [warn]: This is a warning 
+2024-12-23T21:16:15.908Z [error]: This is an error message 
+2024-12-23T21:18:15.928Z [info]: This is an info message 
+2024-12-23T21:18:15.928Z [warn]: This is a warning 
+2024-12-23T21:18:15.929Z [error]: This is an error message 
+2024-12-23T21:18:15.970Z [error]: Error connecting to MongoDB querySrv ECONNREFUSED _mongodb._tcp.cluster0.kwjct.mongodb.net {"code":"ECONNREFUSED","syscall":"querySrv","hostname":"_mongodb._tcp.cluster0.kwjct.mongodb.net","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.kwjct.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:293:17)"}
+2024-12-23T21:18:49.261Z [info]: This is an info message 
+2024-12-23T21:18:49.262Z [warn]: This is a warning 
+2024-12-23T21:18:49.262Z [error]: This is an error message 
+2024-12-23T21:21:02.334Z [error]: Error creating and associating colony with game Cast to ObjectId failed for value "12345" (type string) at path "_id" for model "Game" {"stringValue":"\"12345\"","kind":"ObjectId","value":"12345","path":"_id","reason":{},"valueType":"string","stack":"CastError: Cast to ObjectId failed for value \"12345\" (type string) at path \"_id\" for model \"Game\"\n    at SchemaObjectId.cast (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\schema\\objectId.js:250:11)\n    at SchemaType.applySetters (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1255:12)\n    at SchemaType.castForQuery (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\schemaType.js:1673:17)\n    at cast (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\cast.js:390:32)\n    at Query.cast (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\query.js:4889:12)\n    at Query._castConditions (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\query.js:2306:10)\n    at model.Query._findOne (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\query.js:2630:8)\n    at model.Query.exec (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\query.js:4438:80)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createColony (c:\\Projects\\Mars\\backend\\controllers\\colonyController.js:66:18)"}
+2024-12-23T21:28:53.718Z [info]: This is an info message 
+2024-12-23T21:28:53.718Z [warn]: This is a warning 
+2024-12-23T21:28:53.719Z [error]: This is an error message 
+2024-12-23T21:40:47.693Z [info]: This is an info message 
+2024-12-23T21:40:47.694Z [warn]: This is a warning 
+2024-12-23T21:40:47.694Z [error]: This is an error message 
+2024-12-23T21:42:45.882Z [info]: This is an info message 
+2024-12-23T21:42:45.883Z [warn]: This is a warning 
+2024-12-23T21:42:45.883Z [error]: This is an error message 
+2024-12-23T22:38:07.130Z [info]: This is an info message 
+2024-12-23T22:38:07.131Z [warn]: This is a warning 
+2024-12-23T22:38:07.131Z [error]: This is an error message 
+2024-12-24T03:27:19.870Z [info]: This is an info message 
+2024-12-24T03:27:19.871Z [warn]: This is a warning 
+2024-12-24T03:27:19.871Z [error]: This is an error message 
+2024-12-24T03:31:48.782Z [info]: This is an info message 
+2024-12-24T03:31:48.783Z [warn]: This is a warning 
+2024-12-24T03:31:48.784Z [error]: This is an error message 
+2024-12-24T03:33:09.872Z [info]: This is an info message 
+2024-12-24T03:33:09.872Z [warn]: This is a warning 
+2024-12-24T03:33:09.873Z [error]: This is an error message 
+2024-12-24T03:35:43.210Z [info]: This is an info message 
+2024-12-24T03:35:43.211Z [warn]: This is a warning 
+2024-12-24T03:35:43.211Z [error]: This is an error message 
+2024-12-24T03:35:55.660Z [error]: Error fetching colony status {"error":{"stringValue":"\"09dfeb62-bae9-416e-90d7-91c787ae1cce\"","valueType":"string","kind":"ObjectId","value":"09dfeb62-bae9-416e-90d7-91c787ae1cce","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"09dfeb62-bae9-416e-90d7-91c787ae1cce\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T03:37:16.807Z [info]: This is an info message 
+2024-12-24T03:37:16.808Z [warn]: This is a warning 
+2024-12-24T03:37:16.808Z [error]: This is an error message 
+2024-12-24T03:37:30.025Z [error]: Error fetching colony status {"error":{"stringValue":"\"243883d5-8cd5-461b-9715-c18cb58755b0\"","valueType":"string","kind":"ObjectId","value":"243883d5-8cd5-461b-9715-c18cb58755b0","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"243883d5-8cd5-461b-9715-c18cb58755b0\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T03:48:28.053Z [error]: Error fetching colony status {"error":{"stringValue":"\"2327e09b-6b9d-4112-8f23-87b3948fa8fc\"","valueType":"string","kind":"ObjectId","value":"2327e09b-6b9d-4112-8f23-87b3948fa8fc","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"2327e09b-6b9d-4112-8f23-87b3948fa8fc\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T03:48:38.689Z [error]: Error fetching colony status {"error":{"stringValue":"\"ff8e8ac1-9800-43b4-806d-656ac7068110\"","valueType":"string","kind":"ObjectId","value":"ff8e8ac1-9800-43b4-806d-656ac7068110","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"ff8e8ac1-9800-43b4-806d-656ac7068110\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T03:58:39.324Z [error]: Error fetching colony status {"error":{"stringValue":"\"f3f3ee94-e723-4c03-9402-7517d8d47983\"","valueType":"string","kind":"ObjectId","value":"f3f3ee94-e723-4c03-9402-7517d8d47983","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"f3f3ee94-e723-4c03-9402-7517d8d47983\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T03:59:15.930Z [error]: Error fetching colony status {"error":{"stringValue":"\"77dfc30b-7904-48b3-90a8-cce0aa4615d8\"","valueType":"string","kind":"ObjectId","value":"77dfc30b-7904-48b3-90a8-cce0aa4615d8","path":"_id","reason":{},"name":"CastError","message":"Cast to ObjectId failed for value \"77dfc30b-7904-48b3-90a8-cce0aa4615d8\" (type string) at path \"_id\" for model \"Colony\""}}
+2024-12-24T04:05:53.671Z [info]: This is an info message 
+2024-12-24T04:05:53.672Z [warn]: This is a warning 
+2024-12-24T04:05:53.672Z [error]: This is an error message 
+2024-12-24T04:13:40.781Z [info]: This is an info message 
+2024-12-24T04:13:40.782Z [warn]: This is a warning 
+2024-12-24T04:13:40.782Z [error]: This is an error message 
+2024-12-24T04:15:30.130Z [info]: This is an info message 
+2024-12-24T04:15:30.131Z [warn]: This is a warning 
+2024-12-24T04:15:30.132Z [error]: This is an error message 
+2024-12-24T04:16:44.339Z [info]: This is an info message 
+2024-12-24T04:16:44.340Z [warn]: This is a warning 
+2024-12-24T04:16:44.340Z [error]: This is an error message 
+2024-12-24T04:16:57.291Z [info]: This is an info message 
+2024-12-24T04:16:57.292Z [warn]: This is a warning 
+2024-12-24T04:16:57.293Z [error]: This is an error message 
+2024-12-24T04:17:36.722Z [info]: This is an info message 
+2024-12-24T04:17:36.723Z [warn]: This is a warning 
+2024-12-24T04:17:36.723Z [error]: This is an error message 
+2024-12-24T04:31:58.959Z [info]: This is an info message 
+2024-12-24T04:31:58.960Z [warn]: This is a warning 
+2024-12-24T04:31:58.960Z [error]: This is an error message 
+2024-12-24T04:36:36.160Z [info]: This is an info message 
+2024-12-24T04:36:36.161Z [warn]: This is a warning 
+2024-12-24T04:36:36.161Z [error]: This is an error message 
+2024-12-24T04:49:17.825Z [info]: This is an info message 
+2024-12-24T04:49:17.826Z [warn]: This is a warning 
+2024-12-24T04:49:17.826Z [error]: This is an error message 
+2024-12-24T04:56:24.268Z [error]: SyntaxError: Unexpected token ''', "'{name:" is not valid JSON 
+2024-12-24T04:56:32.330Z [error]: SyntaxError: Unexpected token ''', "'{name:" is not valid JSON 
+2024-12-24T04:57:01.626Z [error]: SyntaxError: Unexpected token ''', "'{name:" is not valid JSON 
+2024-12-24T05:00:27.099Z [info]: This is an info message 
+2024-12-24T05:00:27.100Z [warn]: This is a warning 
+2024-12-24T05:00:27.101Z [error]: This is an error message 
+2024-12-24T05:03:51.185Z [info]: This is an info message 
+2024-12-24T05:03:51.185Z [warn]: This is a warning 
+2024-12-24T05:03:51.186Z [error]: This is an error message 
+2024-12-24T05:08:00.440Z [info]: This is an info message 
+2024-12-24T05:08:00.441Z [warn]: This is a warning 
+2024-12-24T05:08:00.441Z [error]: This is an error message 
+2024-12-24T05:12:47.810Z [info]: This is an info message 
+2024-12-24T05:12:47.810Z [warn]: This is a warning 
+2024-12-24T05:12:47.811Z [error]: This is an error message 
+2024-12-24T05:14:52.887Z [info]: This is an info message 
+2024-12-24T05:14:52.887Z [warn]: This is a warning 
+2024-12-24T05:14:52.887Z [error]: This is an error message 
+2024-12-24T05:22:33.877Z [info]: This is an info message 
+2024-12-24T05:22:33.877Z [warn]: This is a warning 
+2024-12-24T05:22:33.877Z [error]: This is an error message 
+2024-12-24T05:37:03.925Z [info]: This is an info message 
+2024-12-24T05:37:03.926Z [warn]: This is a warning 
+2024-12-24T05:37:03.926Z [error]: This is an error message 
+2024-12-24T05:38:03.177Z [info]: This is an info message 
+2024-12-24T05:38:03.178Z [warn]: This is a warning 
+2024-12-24T05:38:03.178Z [error]: This is an error message 
+2024-12-24T05:40:51.261Z [info]: This is an info message 
+2024-12-24T05:40:51.262Z [warn]: This is a warning 
+2024-12-24T05:40:51.262Z [error]: This is an error message 
+2024-12-24T05:42:15.888Z [info]: This is an info message 
+2024-12-24T05:42:15.889Z [warn]: This is a warning 
+2024-12-24T05:42:15.889Z [error]: This is an error message 
+2024-12-24T05:44:45.506Z [info]: This is an info message 
+2024-12-24T05:44:45.507Z [warn]: This is a warning 
+2024-12-24T05:44:45.508Z [error]: This is an error message 
+2024-12-24T05:48:17.646Z [info]: This is an info message 
+2024-12-24T05:48:17.647Z [warn]: This is a warning 
+2024-12-24T05:48:17.647Z [error]: This is an error message 
+2024-12-24T05:58:44.130Z [info]: This is an info message 
+2024-12-24T05:58:44.131Z [warn]: This is a warning 
+2024-12-24T05:58:44.131Z [error]: This is an error message 
