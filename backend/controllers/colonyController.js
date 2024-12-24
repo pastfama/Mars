@@ -1,19 +1,30 @@
 const Colony = require('../models/colonyModel');
 const Player = require('../models/playerModel'); // Assuming you have a Player model
+const Game = require('../models/game');
 
 // Create a new colony
 const createColony = async (req, res) => {
   const { name, gameId, playerName } = req.body;
 
+  if (!name || !gameId || !playerName) {
+    return res.status(400).json({ message: 'Name, gameId, and playerName are required' });
+  }
+
   try {
-    // Check if player exists, if not create a new player
+    // Check if the game exists
+    const game = await Game.findById(gameId);
+    if (!game) {
+      return res.status(404).json({ message: 'Game not found' });
+    }
+
+    // Check if the player exists, if not create a new player
     let player = await Player.findOne({ playerName });
     if (!player) {
       player = new Player({ playerName });
       await player.save();
     }
 
-    // Create a new colony and associate it with the player
+    // Create a new colony and associate it with the player and game
     const newColony = new Colony({
       name,
       gameId,
@@ -22,6 +33,7 @@ const createColony = async (req, res) => {
 
     // Save the colony
     await newColony.save();
+
     res.status(201).json({ colony: newColony });
   } catch (error) {
     console.error('Error creating colony:', error);

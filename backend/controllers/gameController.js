@@ -1,20 +1,37 @@
-const Game = require('../models/Game');
+const Game = require('../models/game');
+const Colony = require('../models/colonyModel'); // Ensure this import is present
 
 // Controller to create a new game
 const createGame = async (req, res) => {
-  const { name, description, colony, playerName } = req.body;
+  const { name, description, colonyName, playerName } = req.body;
+
   try {
+    // Create a new colony
+    const newColony = new Colony({
+      name: colonyName,
+      resources: {
+        food: 100, // Default resource values
+        water: 100,
+        power: 100,
+      },
+    });
+
+    await newColony.save();
+
+    // Create a new game and associate it with the colony
     const newGame = new Game({
       name,
       description,
-      colony,
+      colony: newColony._id, // Link the colony
       playerName,
     });
 
     await newGame.save();
-    res.status(201).json({ game: newGame });
+
+    res.status(201).json({ game: newGame, colony: newColony });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create game' });
+    console.error('Error creating game and colony:', error);
+    res.status(500).json({ error: 'Failed to create game and colony' });
   }
 };
 

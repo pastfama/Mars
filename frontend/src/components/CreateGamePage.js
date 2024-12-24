@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const CreateGamePage = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [colony, setColony] = useState('');
+  const [colonyName, setColonyName] = useState('');
   const [playerName, setPlayerName] = useState('');
   const navigate = useNavigate();
 
@@ -14,26 +14,27 @@ const CreateGamePage = () => {
     const newGame = {
       name,
       description,
-      colony,
+      colonyName, // Use colonyName instead of colony
       playerName,
     };
 
     try {
-      const response = await fetch('http://localhost:5000/game', {  // Updated to '/game'
+      const response = await fetch('http://localhost:5000/game', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newGame),
       });
 
       const data = await response.json();
-      if (data.game) {
-        alert('Game created successfully!');
-        navigate(`/game/${data.game._id}`);
+      if (response.ok) {
+        alert('Game and colony created successfully!');
+        navigate(`/game/${data.game._id}`); // Navigate to the game page
       } else {
-        alert('Failed to create game');
+        alert(data.error || 'Failed to create game and colony');
       }
     } catch (error) {
-      console.error('Error creating game:', error);
+      console.error('Error creating game and colony:', error);
+      alert('Error creating game and colony');
     }
   };
 
@@ -42,7 +43,7 @@ const CreateGamePage = () => {
       <h1>Create a New Game</h1>
       <form onSubmit={handleCreateGame}>
         <div>
-          <label>Name: </label>
+          <label>Game Name: </label>
           <input
             type="text"
             value={name}
@@ -60,11 +61,11 @@ const CreateGamePage = () => {
           />
         </div>
         <div>
-          <label>Colony: </label>
+          <label>Colony Name: </label>
           <input
             type="text"
-            value={colony}
-            onChange={(e) => setColony(e.target.value)}
+            value={colonyName}
+            onChange={(e) => setColonyName(e.target.value)}
             required
           />
         </div>
