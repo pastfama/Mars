@@ -12,7 +12,7 @@ const Homepage = () => {
 
   const fetchGames = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/game'); // Adjust the URL if needed
+      const response = await fetch('http://localhost:5000/game'); // Adjust the URL if needed
       const data = await response.json();
       setGames(data.games || []);
     } catch (error) {
@@ -23,7 +23,7 @@ const Homepage = () => {
   const handleGetGameById = async () => {
     if (gameId) {
       try {
-        const response = await fetch(`http://localhost:5000/api/game/${gameId}`); // Fetch single game by ID
+        const response = await fetch(`http://localhost:5000/game/${gameId}`); // Fetch single game by ID
         const data = await response.json();
         alert(`Game fetched: ${JSON.stringify(data.game)}`);
       } catch (error) {
