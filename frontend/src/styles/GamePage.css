@@ -54,3 +54,36 @@ body {
   text-align: center;
   color: black;
 }
+
+.characteristics {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.characteristic {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.characteristic p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress {
+  height: 25px;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}

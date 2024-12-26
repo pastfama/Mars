@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Form, Button, Spinner, Container, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/CreateGamePage.css';
 
 const CreateGamePage = () => {
   const [name, setName] = useState('Default Game Name');
   const [description, setDescription] = useState('Default Description');
   const [colonyName, setColonyName] = useState('Default Colony Name');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateGame = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const newGame = {
       name: name || 'Default Game Name',
@@ -34,45 +38,51 @@ const CreateGamePage = () => {
     } catch (error) {
       console.error('Error creating game and colony:', error);
       alert('Error creating game and colony');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="create-game-page">
-      <div className="create-game-container">
-        <h1>Create a New Game</h1>
-        <form onSubmit={handleCreateGame}>
-          <div>
-            <label>Game Name: </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Description: </label>
-            <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Colony Name: </label>
-            <input
-              type="text"
-              value={colonyName}
-              onChange={(e) => setColonyName(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Create Game</button>
-        </form>
-      </div>
-    </div>
+    <Container>
+      <Row className="justify-content-md-center">
+        <Col md="6">
+          <h2>Create a New Game</h2>
+          <Form onSubmit={handleCreateGame}>
+            <Form.Group controlId="formGameName">
+              <Form.Label>Game Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formColonyName">
+              <Form.Label>Colony Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={colonyName}
+                onChange={(e) => setColonyName(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? <Spinner animation="border" size="sm" /> : 'Create Game'}
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
