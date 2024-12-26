@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/CreateGamePage.css';
 
 const CreateGamePage = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [colonyName, setColonyName] = useState('');
-  const [playerName, setPlayerName] = useState('');
+  const [name, setName] = useState('Default Game Name');
+  const [description, setDescription] = useState('Default Description');
+  const [colonyName, setColonyName] = useState('Default Colony Name');
   const navigate = useNavigate();
 
   const handleCreateGame = async (e) => {
     e.preventDefault();
 
     const newGame = {
-      name,
-      description,
-      colonyName, // Use colonyName instead of colony
-      playerName,
+      name: name || 'Default Game Name',
+      description: description || 'Default Description',
+      colonyName: colonyName || 'Default Colony Name',
     };
 
     try {
@@ -39,47 +38,40 @@ const CreateGamePage = () => {
   };
 
   return (
-    <div>
-      <h1>Create a New Game</h1>
-      <form onSubmit={handleCreateGame}>
-        <div>
-          <label>Game Name: </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Description: </label>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Colony Name: </label>
-          <input
-            type="text"
-            value={colonyName}
-            onChange={(e) => setColonyName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Player Name: </label>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Create Game</button>
-      </form>
+    <div className="create-game-page">
+      <div className="create-game-container">
+        <h1>Create a New Game</h1>
+        <form onSubmit={handleCreateGame}>
+          <div>
+            <label>Game Name: </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Description: </label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Colony Name: </label>
+            <input
+              type="text"
+              value={colonyName}
+              onChange={(e) => setColonyName(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Create Game</button>
+        </form>
+      </div>
     </div>
   );
 };

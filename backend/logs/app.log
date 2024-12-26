@@ -210,3 +210,49 @@
 2024-12-26T06:33:04.302Z [info]: This is an info message 
 2024-12-26T06:33:04.303Z [warn]: This is a warning 
 2024-12-26T06:33:04.303Z [error]: This is an error message 
+2024-12-26T08:08:33.009Z [info]: This is an info message 
+2024-12-26T08:08:33.010Z [warn]: This is a warning 
+2024-12-26T08:08:33.010Z [error]: This is an error message 
+2024-12-26T08:21:37.790Z [info]: This is an info message 
+2024-12-26T08:21:37.791Z [warn]: This is a warning 
+2024-12-26T08:21:37.791Z [error]: This is an error message 
+2024-12-26T08:37:35.513Z [info]: This is an info message 
+2024-12-26T08:37:35.514Z [warn]: This is a warning 
+2024-12-26T08:37:35.514Z [error]: This is an error message 
+2024-12-26T08:43:21.358Z [info]: This is an info message 
+2024-12-26T08:43:21.358Z [warn]: This is a warning 
+2024-12-26T08:43:21.359Z [error]: This is an error message 
+2024-12-26T08:43:27.601Z [error]: unhandledRejection: Can't save() the same doc multiple times in parallel. Document: 676d172e3c43a3fe4626cafa
+ParallelSaveError: Can't save() the same doc multiple times in parallel. Document: 676d172e3c43a3fe4626cafa
+    at model.save (c:\Projects\Mars\backend\node_modules\mongoose\lib\model.js:558:20)
+    at createGame (c:\Projects\Mars\backend\controllers\gameController.js:72:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{},"stack":"ParallelSaveError: Can't save() the same doc multiple times in parallel. Document: 676d172e3c43a3fe4626cafa\n    at model.save (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\model.js:558:20)\n    at createGame (c:\\Projects\\Mars\\backend\\controllers\\gameController.js:72:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","rejection":true,"date":"Thu Dec 26 2024 00:43:27 GMT-0800 (Pacific Standard Time)","process":{"pid":49116,"uid":null,"gid":null,"cwd":"c:\\Projects\\Mars\\backend","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.12.0","argv":["C:\\Program Files\\nodejs\\node.exe","c:\\Projects\\Mars\\backend\\server.js"],"memoryUsage":{"rss":87306240,"heapTotal":42278912,"heapUsed":28327760,"external":20688588,"arrayBuffers":18320522}},"os":{"loadavg":[0,0,0],"uptime":29767.703},"trace":[{"column":20,"file":"c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\model.js","function":"model.save","line":558,"method":"save","native":false},{"column":16,"file":"c:\\Projects\\Mars\\backend\\controllers\\gameController.js","function":"createGame","line":72,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"process.processTicksAndRejections","line":105,"method":"processTicksAndRejections","native":false}]}
+2024-12-26T08:43:42.795Z [info]: This is an info message 
+2024-12-26T08:43:42.795Z [warn]: This is a warning 
+2024-12-26T08:43:42.795Z [error]: This is an error message 
+2024-12-26T08:43:50.573Z [error]: unhandledRejection: Can't save() the same doc multiple times in parallel. Document: 676d1745fb13119f5a5a380f
+ParallelSaveError: Can't save() the same doc multiple times in parallel. Document: 676d1745fb13119f5a5a380f
+    at model.save (c:\Projects\Mars\backend\node_modules\mongoose\lib\model.js:558:20)
+    at createGame (c:\Projects\Mars\backend\controllers\gameController.js:72:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{},"stack":"ParallelSaveError: Can't save() the same doc multiple times in parallel. Document: 676d1745fb13119f5a5a380f\n    at model.save (c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\model.js:558:20)\n    at createGame (c:\\Projects\\Mars\\backend\\controllers\\gameController.js:72:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","rejection":true,"date":"Thu Dec 26 2024 00:43:50 GMT-0800 (Pacific Standard Time)","process":{"pid":36252,"uid":null,"gid":null,"cwd":"c:\\Projects\\Mars\\backend","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.12.0","argv":["C:\\Program Files\\nodejs\\node.exe","c:\\Projects\\Mars\\backend\\server.js"],"memoryUsage":{"rss":85913600,"heapTotal":59318272,"heapUsed":25635664,"external":20680396,"arrayBuffers":18312330}},"os":{"loadavg":[0,0,0],"uptime":29790.671},"trace":[{"column":20,"file":"c:\\Projects\\Mars\\backend\\node_modules\\mongoose\\lib\\model.js","function":"model.save","line":558,"method":"save","native":false},{"column":16,"file":"c:\\Projects\\Mars\\backend\\controllers\\gameController.js","function":"createGame","line":72,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"process.processTicksAndRejections","line":105,"method":"processTicksAndRejections","native":false}]}
+2024-12-26T08:45:30.385Z [info]: This is an info message 
+2024-12-26T08:45:30.386Z [warn]: This is a warning 
+2024-12-26T08:45:30.386Z [error]: This is an error message 
+2024-12-26T08:52:00.663Z [info]: This is an info message 
+2024-12-26T08:52:00.664Z [warn]: This is a warning 
+2024-12-26T08:52:00.664Z [error]: This is an error message 
+2024-12-26T08:57:19.456Z [info]: This is an info message 
+2024-12-26T08:57:19.456Z [warn]: This is a warning 
+2024-12-26T08:57:19.457Z [error]: This is an error message 
+2024-12-26T09:03:13.785Z [info]: This is an info message 
+2024-12-26T09:03:13.786Z [warn]: This is a warning 
+2024-12-26T09:03:13.786Z [error]: This is an error message 
+2024-12-26T09:06:53.722Z [info]: This is an info message 
+2024-12-26T09:06:53.722Z [warn]: This is a warning 
+2024-12-26T09:06:53.723Z [error]: This is an error message 
+2024-12-26T09:12:50.046Z [info]: This is an info message 
+2024-12-26T09:12:50.047Z [warn]: This is a warning 
+2024-12-26T09:12:50.048Z [error]: This is an error message 
+2024-12-26T09:16:47.645Z [info]: This is an info message 
+2024-12-26T09:16:47.646Z [warn]: This is a warning 
+2024-12-26T09:16:47.647Z [error]: This is an error message 

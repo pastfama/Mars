@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.homepage {
+  background-image: url('../assets/images/background.webp');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+.homepage h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+  font-family: 'Georgia', serif;
+}
+
+.homepage h2 {
+  font-size: 2em;
+  margin-bottom: 15px;
+  font-family: 'Georgia', serif;
+}
+
+.homepage p, .homepage ul {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.homepage input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 10px;
+}
+
+.homepage button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.homepage button:hover {
+  background-color: #0056b3;
+}
+
+.homepage a {
+  text-decoration: none;
+}
+
+.homepage a button {
+  width: 200px;
+}

@@ -18,6 +18,11 @@ const playerSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  gender: {
+    type: String,
+    required: true,
+    enum: ['male', 'female'],
+  },
   skills: {
     engineering: { type: Number, default: 0 },
     biology: { type: Number, default: 0 },
@@ -38,6 +43,10 @@ const playerSchema = new mongoose.Schema({
     relationshipType: { type: String, enum: ['friend', 'enemy', 'family', 'neutral'], default: 'neutral' },
     trustLevel: { type: Number, min: 0, max: 100, default: 50 },
   }],
+  parents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
+  siblings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
+  relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
+  mainPlayer: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

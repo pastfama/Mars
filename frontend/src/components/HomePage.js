@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/HomePage.css';
 
-const Homepage = () => {
+const HomePage = () => {
   const [games, setGames] = useState([]); // Holds the list of games
   const [gameId, setGameId] = useState('');
 
@@ -33,7 +34,7 @@ const Homepage = () => {
   };
 
   return (
-    <div>
+    <div className="homepage">
       <h1>Welcome to Mars: A New Hope Game</h1>
 
       {/* Display the list of games */}
@@ -78,4 +79,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
