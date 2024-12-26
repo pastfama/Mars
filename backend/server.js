@@ -50,7 +50,12 @@ app.get('/', (req, res) => {
 });
 
 // Register routes
-app.use('/game', gameRoutes); // Ensure the /game route is correctly registered
+app.use('/player', playerRoutes);
+app.use('/game', gameRoutes);
+app.use('/colony', colonyRoutes); // Ensure the /colony route is correctly registered
+app.use('/events', eventsRoutes);
+app.use('/research', researchRoutes);
+app.use('/missions', missionsRoutes);
 
 // Handle 404 - Route not found
 app.use((req, res, next) => {
