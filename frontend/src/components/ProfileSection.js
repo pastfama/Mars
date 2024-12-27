@@ -7,18 +7,18 @@ const ProfileSection = ({ mainPlayer, getProgressBarColor }) => {
       <h2>Profile</h2>
       {mainPlayer ? (
         <div>
-          <p>Name: {mainPlayer.player.name}</p>
-          <p>Age: {mainPlayer.player.age}</p>
+          <p>Name: {mainPlayer.name}</p>
+          <p>Age: {mainPlayer.age}</p>
           <p>Role: {mainPlayer.role}</p>
           <div className="characteristics">
-            {['Health', 'Happiness', 'Intelligence', 'Looks'].map((char) => (
+            {['health', 'happiness', 'smarts', 'looks'].map((char) => (
               <div className="characteristic" key={char}>
-                <p>{char}</p>
+                <p>{char.charAt(0).toUpperCase() + char.slice(1)}</p>
                 <div className="progress-bar">
                   <div
-                    className={`progress ${getProgressBarColor(mainPlayer.player[char.toLowerCase()])}`}
+                    className={`progress ${getProgressBarColor(mainPlayer[char])}`}
                     style={{
-                      width: `${mainPlayer.player[char.toLowerCase()]}%`,
+                      width: `${mainPlayer[char]}%`,
                     }}
                   ></div>
                 </div>

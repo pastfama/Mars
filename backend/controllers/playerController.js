@@ -23,24 +23,15 @@ const createPlayer = async (req, res) => {
 
 // GET: Get player details by ID
 const getPlayerById = async (req, res) => {
-  const { id } = req.params;
-
-  logger.logDebug('Received request to get player details', { playerId: id });
-
   try {
-    const player = await Player.findById(id);
-
+    const player = await Player.findById(req.params.id);
     if (!player) {
-      logger.logDebug('Player not found', { playerId: id });
-      return res.status(404).json({ error: 'Player not found' });
+      return res.status(404).json({ message: 'Player not found' });
     }
-
-    logger.logDebug('Player details fetched successfully', { playerId: id });
-
-    res.status(200).json(player);
+    res.json(player);
   } catch (error) {
-    logger.logError('Error fetching player details', error);
-    res.status(500).json({ error: 'Failed to fetch player details' });
+    console.error('Error fetching player details', error);
+    res.status(500).json({ message: 'Error fetching player details' });
   }
 };
 

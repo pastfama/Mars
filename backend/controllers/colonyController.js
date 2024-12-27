@@ -18,19 +18,81 @@ const createColony = async (req, res) => {
       return res.status(404).json({ message: 'Game not found' });
     }
 
-    // Create 5-10 players
-    const playerCount = Math.floor(Math.random() * 6) + 5; // Random number between 5 and 10
-    const players = [];
+    // Create parents
+    const father = new Player({
+      name: `${playerName}_Father`,
+      age: Math.floor(Math.random() * 10) + 30, // Age between 30 and 40
+      gender: 'male',
+    });
+    await father.save();
+
+    const mother = new Player({
+      name: `${playerName}_Mother`,
+      age: Math.floor(Math.random() * 10) + 30, // Age between 30 and 40
+      gender: 'female',
+    });
+    await mother.save();
+
+    // Create main player (newborn)
+    const mainPlayer = new Player({
+      name: playerName,
+      age: 0,
+      gender: 'male', // or 'female', based on your logic
+      mainPlayer: true,
+      parents: [father._id, mother._id],
+    });
+    await mainPlayer.save();
+
+    // Create other players
+    const playerCount = Math.floor(Math.random() * 6) + 2; // Random number between 2 and 7
+    const players = [father, mother, mainPlayer];
 
     for (let i = 0; i < playerCount; i++) {
-      const player = new Player({ name: `${playerName}_${i}`, age: Math.floor(Math.random() * 50) + 20 });
+      const player = new Player({
+        name: `${playerName}_${i}`,
+        age: Math.floor(Math.random() * 50) + 20,
+      });
       await player.save();
       players.push(player);
     }
 
-    // Sort players by age to find the oldest
-    players.sort((a, b) => b.age - a.age);
-    const leader = players[0];
+    // Create relationships
+    for (const player of players) {
+      player.relationships = players.filter(p => p._id !== player._id).map(p => ({
+        player: p._id,
+        relationshipType: 'neutral',
+        trustLevel: 50,
+      }));
+      await player.save();
+    }
+
+    // Set family relationships
+    mainPlayer.parents = [father._id, mother._id];
+    await mainPlayer.save();
+
+    father.relationships.push({
+      player: mother._id,
+      relationshipType: 'family',
+      trustLevel: 80,
+    });
+    father.relationships.push({
+      player: mainPlayer._id,
+      relationshipType: 'family',
+      trustLevel: 100,
+    });
+    await father.save();
+
+    mother.relationships.push({
+      player: father._id,
+      relationshipType: 'family',
+      trustLevel: 80,
+    });
+    mother.relationships.push({
+      player: mainPlayer._id,
+      relationshipType: 'family',
+      trustLevel: 100,
+    });
+    await mother.save();
 
     // Create a new colony and associate it with the players and game
     const newColony = new Colony({
@@ -38,7 +100,7 @@ const createColony = async (req, res) => {
       name,
       gameId,
       players: players.map(player => ({ player: player._id, role: 'colonist' })),
-      leader: leader._id,
+      leader: father._id,
     });
 
     // Save the colony

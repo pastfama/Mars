@@ -16,7 +16,6 @@ const GamePage = () => {
   const [players, setPlayers] = useState([]);
   const [mainPlayer, setMainPlayer] = useState(null);
   const [activeSection, setActiveSection] = useState('Profile');
-  const [player, setPlayer] = useState(null);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -57,8 +56,12 @@ const GamePage = () => {
     }
   };
 
-  const identifyMainPlayer = (players) => {
-    const mainPlayer = players.find(player => player.mainPlayer);
+  const identifyMainPlayer = async (players) => {
+    const mainPlayerData = await Promise.all(players.map(async (player) => {
+      const response = await fetch(`http://localhost:5000/player/${player.player._id}`);
+      return response.json();
+    }));
+    const mainPlayer = mainPlayerData.find(player => player.mainPlayer);
     setMainPlayer(mainPlayer);
   };
 
@@ -68,20 +71,6 @@ const GamePage = () => {
     return 'green';
   };
 
-  const fetchPlayer = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/player/{playerId}');
-      const data = await response.json();
-      setPlayer(data);
-    } catch (error) {
-      console.error('Error fetching player:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPlayer();
-  }, []);
-
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -90,8 +79,8 @@ const GamePage = () => {
         return (
           <div className="content-section">
             <h2>Relationships</h2>
-            {mainPlayer && mainPlayer.player && (
-              <RelationshipsSection relationships={mainPlayer.player.relationships} />
+            {mainPlayer && mainPlayer.relationships && (
+              <RelationshipsSection relationships={mainPlayer.relationships} />
             )}
           </div>
         );

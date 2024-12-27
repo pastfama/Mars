@@ -12,20 +12,27 @@ const RelationshipsSection = ({ relationships = [] }) => {
     </li>
   );
 
-  const parents = relationships.filter(r => r.relationshipType === 'parent');
+  const mothers = relationships.filter(r => r.relationshipType === 'mother');
+  const fathers = relationships.filter(r => r.relationshipType === 'father');
   const siblings = relationships.filter(r => r.relationshipType === 'sibling');
   const relatives = relationships.filter(r => r.relationshipType === 'relative');
-  const others = relationships.filter(r => !['parent', 'sibling', 'relative'].includes(r.relationshipType));
+  const others = relationships.filter(r => !['mother', 'father', 'sibling', 'relative'].includes(r.relationshipType));
 
   return (
     <div className="content-section">
       <h2>Relationships</h2>
       {relationships.length > 0 ? (
         <ul>
-          {parents.length > 0 && (
+          {mothers.length > 0 && (
             <>
-              <h3>Parents</h3>
-              {parents.map(renderRelationship)}
+              <h3>Mothers</h3>
+              {mothers.map(renderRelationship)}
+            </>
+          )}
+          {fathers.length > 0 && (
+            <>
+              <h3>Fathers</h3>
+              {fathers.map(renderRelationship)}
             </>
           )}
           {siblings.length > 0 && (
