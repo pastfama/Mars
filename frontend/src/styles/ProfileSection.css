@@ -1,0 +1,47 @@
+.content-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.characteristics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.characteristic {
+  display: flex;
+  flex-direction: column;
+}
+
+.characteristic p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.progress.red {
+  background-color: #ff4d4d;
+}
+
+.progress.yellow {
+  background-color: #ffeb3b;
+}
+
+.progress.green {
+  background-color: #4caf50;
+}
