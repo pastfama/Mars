@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/GameManagementPage.css';
 
-const GameManagement = () => {
+const GameManagementPage = () => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -37,8 +38,9 @@ const GameManagement = () => {
   };
 
   return (
-    <div>
+    <div className="game-management">
       <h1>Game Management</h1>
+      <p>Warning: The colony is in danger of deletion and complete destruction!</p>
       {games.length > 0 ? (
         <ul>
           {games.map(game => (
@@ -55,4 +57,4 @@ const GameManagement = () => {
   );
 };
 
-export default GameManagement;
+export default GameManagementPage;
