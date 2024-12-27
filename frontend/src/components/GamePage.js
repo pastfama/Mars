@@ -7,6 +7,7 @@ import ActivitiesButton from './ActivitiesButton';
 import AssetsButton from './AssetsButton';
 import SettingsButton from './SettingsButton';
 import ProfileSection from './ProfileSection';
+import RelationshipsSection from './RelationshipsSection';
 
 const GamePage = () => {
   const { id } = useParams(); // Get game ID from the URL
@@ -15,6 +16,7 @@ const GamePage = () => {
   const [players, setPlayers] = useState([]);
   const [mainPlayer, setMainPlayer] = useState(null);
   const [activeSection, setActiveSection] = useState('Profile');
+  const [player, setPlayer] = useState(null);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -56,7 +58,7 @@ const GamePage = () => {
   };
 
   const identifyMainPlayer = (players) => {
-    const mainPlayer = players.find(player => player.player.mainPlayer);
+    const mainPlayer = players.find(player => player.mainPlayer);
     setMainPlayer(mainPlayer);
   };
 
@@ -66,6 +68,20 @@ const GamePage = () => {
     return 'green';
   };
 
+  const fetchPlayer = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/player/{playerId}');
+      const data = await response.json();
+      setPlayer(data);
+    } catch (error) {
+      console.error('Error fetching player:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlayer();
+  }, []);
+
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -74,7 +90,9 @@ const GamePage = () => {
         return (
           <div className="content-section">
             <h2>Relationships</h2>
-            <p>Relationships content goes here...</p>
+            {mainPlayer && mainPlayer.player && (
+              <RelationshipsSection relationships={mainPlayer.player.relationships} />
+            )}
           </div>
         );
       case 'Activities':
