@@ -15,6 +15,7 @@ body {
   align-items: center;
   text-align: center;
   color: white;
+  padding: 20px;
 }
 
 .homepage h1 {
@@ -27,11 +28,21 @@ body {
   font-size: 2em;
   margin-bottom: 15px;
   font-family: 'Georgia', serif;
+  margin-top: 20px;
 }
 
 .homepage p, .homepage ul {
   font-size: 1.2em;
   margin-bottom: 20px;
+}
+
+.homepage ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.homepage li {
+  margin: 10px 0;
 }
 
 .homepage input {
@@ -41,6 +52,7 @@ body {
   width: 100%;
   max-width: 300px;
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .homepage button {

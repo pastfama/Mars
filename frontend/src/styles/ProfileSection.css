@@ -8,12 +8,10 @@
 .characteristics {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .characteristic {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 10px;
 }
 
 .characteristic p {
@@ -23,7 +21,7 @@
 
 .progress-bar {
   background-color: #e0e0e0;
-  border-radius: 4px;
+  border-radius: 5px;
   overflow: hidden;
   height: 20px;
   margin-top: 5px;
@@ -34,14 +32,18 @@
   transition: width 0.3s ease;
 }
 
-.progress.red {
-  background-color: #ff4d4d;
+.progress.success {
+  background-color: #28a745;
 }
 
-.progress.yellow {
-  background-color: #ffeb3b;
+.progress.info {
+  background-color: #17a2b8;
 }
 
-.progress.green {
-  background-color: #4caf50;
+.progress.warning {
+  background-color: #ffc107;
+}
+
+.progress.danger {
+  background-color: #dc3545;
 }

@@ -53,27 +53,16 @@ const HomePage = () => {
         )}
       </div>
 
-      {/* Search for a game by ID */}
+      {/* Fetch a game by ID */}
       <div>
-        <h2>Search for a Game by ID</h2>
+        <h2>Fetch Game by ID</h2>
         <input
           type="text"
-          placeholder="Enter Game ID"
           value={gameId}
           onChange={(e) => setGameId(e.target.value)}
+          placeholder="Enter game ID"
         />
         <button onClick={handleGetGameById}>Fetch Game</button>
-      </div>
-
-      {/* Links to create or manage games */}
-      <div>
-        <h2>Game Actions</h2>
-        <Link to="/create-game">
-          <button>Create a New Game</button>
-        </Link>
-        <Link to="/game-management">
-          <button>Manage Existing Games</button>
-        </Link>
       </div>
     </div>
   );

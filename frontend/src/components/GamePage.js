@@ -66,9 +66,10 @@ const GamePage = () => {
   };
 
   const getProgressBarColor = (value) => {
-    if (value < 25) return 'red';
-    if (value < 70) return 'yellow';
-    return 'green';
+    if (value > 75) return 'success';
+    if (value > 50) return 'info';
+    if (value > 25) return 'warning';
+    return 'danger';
   };
 
   const renderSection = () => {

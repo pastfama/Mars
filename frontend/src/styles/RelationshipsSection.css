@@ -39,3 +39,43 @@
 .relationship-trust {
   color: #888;
 }
+
+.relationships-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.interaction-button {
+  margin: 5px;
+}
+
+.relationship-bar {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.relationship-progress {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.relationship-progress.success {
+  background-color: #28a745;
+}
+
+.relationship-progress.info {
+  background-color: #17a2b8;
+}
+
+.relationship-progress.warning {
+  background-color: #ffc107;
+}
+
+.relationship-progress.danger {
+  background-color: #dc3545;
+}
