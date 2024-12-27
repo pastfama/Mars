@@ -8,6 +8,7 @@ import AssetsButton from './AssetsButton';
 import SettingsButton from './SettingsButton';
 import ProfileSection from './ProfileSection';
 import RelationshipsSection from './RelationshipsSection';
+import ActivitiesSection from './ActivitiesSection';
 
 const GamePage = () => {
   const { id } = useParams(); // Get game ID from the URL
@@ -72,6 +73,16 @@ const GamePage = () => {
     return 'danger';
   };
 
+  const updatePlayerStats = (effects) => {
+    setMainPlayer((prevPlayer) => {
+      const updatedPlayer = { ...prevPlayer };
+      for (const [key, value] of Object.entries(effects)) {
+        updatedPlayer[key] = (updatedPlayer[key] || 0) + value;
+      }
+      return updatedPlayer;
+    });
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -89,7 +100,9 @@ const GamePage = () => {
         return (
           <div className="content-section">
             <h2>Activities</h2>
-            <p>Activities content goes here...</p>
+            {mainPlayer && mainPlayer._id && (
+              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} />
+            )}
           </div>
         );
       case 'Assets':

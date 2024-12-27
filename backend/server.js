@@ -9,6 +9,7 @@ const colonyRoutes = require('./routes/colonyRoutes'); // Import colony routes
 const eventsRoutes = require('./routes/eventsRoutes'); // Import events routes
 const researchRoutes = require('./routes/researchRoutes'); // Import research routes
 const missionsRoutes = require('./routes/missionsRoutes'); // Import missions routes
+const activitiesRoutes = require('./routes/activitiesRoutes'); // Import activities routes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -56,6 +57,7 @@ app.use('/colony', colonyRoutes); // Ensure the /colony route is correctly regis
 app.use('/events', eventsRoutes);
 app.use('/research', researchRoutes);
 app.use('/missions', missionsRoutes);
+app.use('/activities', activitiesRoutes); // Register activities routes
 
 // Handle 404 - Route not found
 app.use((req, res, next) => {

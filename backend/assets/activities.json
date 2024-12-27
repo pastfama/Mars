@@ -1,0 +1,26 @@
+{
+  "child": [
+    { "name": "Play", "effects": { "happiness": 10, "health": -5 } },
+    { "name": "Study", "effects": { "smarts": 15, "happiness": -5 } },
+    { "name": "Help with chores", "effects": { "responsibility": 10, "happiness": -5 } },
+    { "name": "Attend school", "effects": { "smarts": 20, "happiness": -10 } }
+  ],
+  "teenager": [
+    { "name": "Study", "effects": { "smarts": 15, "happiness": -5 } },
+    { "name": "Part-time job", "effects": { "money": 20, "happiness": -10 } },
+    { "name": "Socialize with friends", "effects": { "happiness": 20, "smarts": -5 } },
+    { "name": "Help with colony tasks", "effects": { "responsibility": 15, "happiness": -5 } }
+  ],
+  "adult": [
+    { "name": "Work", "effects": { "money": 30, "happiness": -10 } },
+    { "name": "Exercise", "effects": { "health": 20, "happiness": 10 } },
+    { "name": "Socialize", "effects": { "happiness": 20, "smarts": -5 } },
+    { "name": "Volunteer", "effects": { "responsibility": 20, "happiness": 10 } }
+  ],
+  "senior": [
+    { "name": "Relax", "effects": { "happiness": 20, "health": 10 } },
+    { "name": "Mentor younger colonists", "effects": { "responsibility": 20, "happiness": 10 } },
+    { "name": "Participate in community events", "effects": { "happiness": 20, "smarts": -5 } },
+    { "name": "Light exercise", "effects": { "health": 15, "happiness": 5 } }
+  ]
+}
