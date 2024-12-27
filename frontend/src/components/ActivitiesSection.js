@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ActivitiesSection.css';
 
-const ActivitiesSection = ({ mainPlayer, updatePlayerStats }) => {
+const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection }) => {
   const [activities, setActivities] = useState([]);
   const [usedActivities, setUsedActivities] = useState({});
 
@@ -37,6 +37,7 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats }) => {
         ...usedActivities,
         [activity.name]: activityCount + 1
       });
+      setActiveSection('Profile'); // Change the active section to Profile
     }
   };
 

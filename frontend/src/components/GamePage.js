@@ -83,21 +83,6 @@ const GamePage = () => {
     });
   };
 
-  const ageUpColony = () => {
-    setPlayers((prevPlayers) => {
-      return prevPlayers.map((player) => ({
-        ...player,
-        age: player.age + 1
-      }));
-    });
-    if (mainPlayer) {
-      setMainPlayer((prevPlayer) => ({
-        ...prevPlayer,
-        age: prevPlayer.age + 1
-      }));
-    }
-  };
-
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -116,7 +101,7 @@ const GamePage = () => {
           <div className="content-section">
             <h2>Activities</h2>
             {mainPlayer && mainPlayer._id && (
-              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} />
+              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} />
             )}
           </div>
         );
@@ -150,9 +135,6 @@ const GamePage = () => {
       </div>
       <div className="content">
         {renderSection()}
-      </div>
-      <div className="age-up-button-container">
-        <button className="age-up-button" onClick={ageUpColony}>AGE UP</button>
       </div>
     </div>
   );
