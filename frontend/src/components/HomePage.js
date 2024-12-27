@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/HomePage.css';
 
 const HomePage = () => {
   const [games, setGames] = useState([]); // Holds the list of games
   const [gameId, setGameId] = useState('');
+  const navigate = useNavigate();
 
   // Fetch all games on component mount
   useEffect(() => {
@@ -31,6 +32,14 @@ const HomePage = () => {
         alert('Error fetching game');
       }
     }
+  };
+
+  const navigateToCreateGame = () => {
+    navigate('/create-game');
+  };
+
+  const navigateToGameManagement = () => {
+    navigate('/game-management');
   };
 
   return (
@@ -63,6 +72,12 @@ const HomePage = () => {
           placeholder="Enter game ID"
         />
         <button onClick={handleGetGameById}>Fetch Game</button>
+      </div>
+
+      {/* Navigation buttons */}
+      <div className="navigation-buttons">
+        <button onClick={navigateToCreateGame}>Create Game</button>
+        <button onClick={navigateToGameManagement}>Game Management</button>
       </div>
     </div>
   );

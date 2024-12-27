@@ -13,6 +13,7 @@ body {
   flex-direction: column;
   align-items: center;
   color: white;
+  padding: 20px;
 }
 
 .menu {
@@ -21,6 +22,7 @@ body {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 10px 0;
+  margin-bottom: 20px;
 }
 
 .menu-item {
@@ -42,6 +44,8 @@ body {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  max-width: 800px;
+  margin-bottom: 20px;
 }
 
 .content-section {
@@ -86,4 +90,25 @@ body {
   height: 25px;
   border-radius: 10px;
   transition: width 0.5s ease-in-out;
+}
+
+.age-up-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.age-up-button {
+  padding: 15px 30px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.age-up-button:hover {
+  background-color: #218838;
 }
