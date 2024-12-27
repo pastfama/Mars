@@ -1,15 +1,14 @@
-// controllers/playerController.js
 const logger = require('../utils/logger');
 const Player = require('../models/playerModel'); // Assuming you have a Player model set up
 
 // POST: Create a new player
 const createPlayer = async (req, res) => {
-  const { name, skills, health, happiness, smarts, looks } = req.body;
+  const { name, skills, health, happiness, smarts, looks, parents } = req.body;
 
-  logger.logDebug('Received request to create a new player', { name, skills, health, happiness, smarts, looks });
+  logger.logDebug('Received request to create a new player', { name, skills, health, happiness, smarts, looks, parents });
 
   try {
-    const newPlayer = new Player({ name, skills, health, happiness, smarts, looks });
+    const newPlayer = new Player({ name, skills, health, happiness, smarts, looks, parents });
     await newPlayer.save();
 
     logger.logDebug('New player created successfully', { playerId: newPlayer._id });
@@ -24,7 +23,11 @@ const createPlayer = async (req, res) => {
 // GET: Get player details by ID
 const getPlayerById = async (req, res) => {
   try {
-    const player = await Player.findById(req.params.id);
+    const player = await Player.findById(req.params.id)
+      .populate('relationships.player')
+      .populate('parents.player')
+      .populate('siblings')
+      .populate('relatives');
     if (!player) {
       return res.status(404).json({ message: 'Player not found' });
     }
@@ -38,14 +41,14 @@ const getPlayerById = async (req, res) => {
 // PUT: Update player information
 const updatePlayer = async (req, res) => {
   const { id } = req.params;
-  const { name, skills, health, happiness, smarts, looks } = req.body;
+  const { name, skills, health, happiness, smarts, looks, parents } = req.body;
 
   logger.logDebug('Received request to update player', { playerId: id, updatedData: req.body });
 
   try {
     const updatedPlayer = await Player.findByIdAndUpdate(
       id,
-      { name, skills, health, happiness, smarts, looks },
+      { name, skills, health, happiness, smarts, looks, parents },
       { new: true }
     );
 

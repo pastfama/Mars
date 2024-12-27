@@ -79,8 +79,8 @@ const GamePage = () => {
         return (
           <div className="content-section">
             <h2>Relationships</h2>
-            {mainPlayer && mainPlayer.relationships && (
-              <RelationshipsSection relationships={mainPlayer.relationships} />
+            {mainPlayer && mainPlayer._id && (
+              <RelationshipsSection mainPersonId={mainPlayer._id} />
             )}
           </div>
         );

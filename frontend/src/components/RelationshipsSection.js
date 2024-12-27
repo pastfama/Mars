@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/RelationshipsSection.css'; // Update this path if necessary
 
-const RelationshipsSection = ({ relationships = [] }) => {
+const RelationshipsSection = ({ mainPersonId }) => {
+  const [relationships, setRelationships] = useState([]);
+
+  useEffect(() => {
+    const fetchRelationships = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/player/${mainPersonId}`);
+        const data = await response.json();
+        setRelationships(data.relationships);
+        console.log('Fetched relationships:', data.relationships); // Debugging log
+      } catch (error) {
+        console.error('Error fetching relationships:', error);
+      }
+    };
+
+    if (mainPersonId) {
+      fetchRelationships();
+    }
+  }, [mainPersonId]);
+
   const renderRelationship = (relationship) => (
     <li key={relationship.player._id}>
       <div className="relationship-item">
@@ -12,27 +31,25 @@ const RelationshipsSection = ({ relationships = [] }) => {
     </li>
   );
 
-  const mothers = relationships.filter(r => r.relationshipType === 'mother');
-  const fathers = relationships.filter(r => r.relationshipType === 'father');
+  const parents = relationships.filter(r => r.relationshipType === 'mother' || r.relationshipType === 'father');
   const siblings = relationships.filter(r => r.relationshipType === 'sibling');
   const relatives = relationships.filter(r => r.relationshipType === 'relative');
   const others = relationships.filter(r => !['mother', 'father', 'sibling', 'relative'].includes(r.relationshipType));
+
+  console.log('Parents:', parents); // Debugging log
+  console.log('Siblings:', siblings); // Debugging log
+  console.log('Relatives:', relatives); // Debugging log
+  console.log('Others:', others); // Debugging log
 
   return (
     <div className="content-section">
       <h2>Relationships</h2>
       {relationships.length > 0 ? (
         <ul>
-          {mothers.length > 0 && (
+          {parents.length > 0 && (
             <>
-              <h3>Mothers</h3>
-              {mothers.map(renderRelationship)}
-            </>
-          )}
-          {fathers.length > 0 && (
-            <>
-              <h3>Fathers</h3>
-              {fathers.map(renderRelationship)}
+              <h3>Parents</h3>
+              {parents.map(renderRelationship)}
             </>
           )}
           {siblings.length > 0 && (

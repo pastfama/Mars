@@ -3,6 +3,12 @@ const Game = require('../models/game');
 const Colony = require('../models/colonyModel');
 const Player = require('../models/playerModel');
 
+const createPlayer = async (name, age, gender, relationships = [], parents = []) => {
+  const player = new Player({ name, age, gender, relationships, parents });
+  await player.save();
+  return player;
+};
+
 // Controller to create a new game
 const createGame = async (req, res) => {
   const { name, description, colonyName } = req.body;
@@ -14,41 +20,33 @@ const createGame = async (req, res) => {
 
     // Parents
     const fatherLastName = getRandomName('../assets/last_names.txt');
-    const father = new Player({
-      name: getRandomName('../assets/male_names.txt') + ' ' + fatherLastName,
-      age: Math.floor(Math.random() * 10) + 25, // Age between 25 and 35
-      gender: 'male',
-    });
-    await father.save();
+    const fatherName = getRandomName('../assets/male_names.txt') + ' ' + fatherLastName;
+    const motherName = getRandomName('../assets/female_names.txt') + ' ' + fatherLastName;
+
+    const father = await createPlayer(fatherName, Math.floor(Math.random() * 10) + 25, 'male');
     players.push(father);
 
-    const mother = new Player({
-      name: getRandomName('../assets/female_names.txt') + ' ' + fatherLastName,
-      age: Math.floor(Math.random() * 10) + 25, // Age between 25 and 35
-      gender: 'female',
-    });
-    await mother.save();
+    const mother = await createPlayer(motherName, Math.floor(Math.random() * 10) + 25, 'female');
     players.push(mother);
 
     // Main player (newborn)
     const mainPlayerGender = generateRandomGender();
-    const mainPlayer = new Player({
-      name: getRandomName(mainPlayerGender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + fatherLastName,
-      age: 0,
-      gender: mainPlayerGender,
-    });
-    await mainPlayer.save();
+    const mainPlayerName = getRandomName(mainPlayerGender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + fatherLastName;
+    const mainPlayer = await createPlayer(mainPlayerName, 0, mainPlayerGender, [
+      { player: father._id, relationshipType: 'father' },
+      { player: mother._id, relationshipType: 'mother' },
+    ], [
+      { player: father._id, relationshipType: 'father' },
+      { player: mother._id, relationshipType: 'mother' },
+    ]);
     players.push(mainPlayer);
 
     // Other players
     for (let i = 0; i < playerCount - 3; i++) {
       const gender = generateRandomGender();
-      const player = new Player({
-        name: getRandomName(gender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + fatherLastName,
-        age: Math.floor(Math.random() * 30) + 20, // Age between 20 and 49
-        gender,
-      });
-      await player.save();
+      const lastName = getRandomName('../assets/last_names.txt');
+      const playerName = getRandomName(gender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + lastName;
+      const player = await createPlayer(playerName, Math.floor(Math.random() * 30) + 20, gender);
       players.push(player);
     }
 
@@ -63,9 +61,6 @@ const createGame = async (req, res) => {
     }
 
     // Set family relationships
-    mainPlayer.parents = [father._id, mother._id];
-    await mainPlayer.save();
-
     father.relationships.push({
       player: mother._id,
       relationshipType: 'family',
@@ -91,11 +86,8 @@ const createGame = async (req, res) => {
     await mother.save();
 
     // Set the mainPlayer flag for the newborn
-    const newborn = players.find(player => player.age === 0);
-    if (newborn) {
-      newborn.mainPlayer = true;
-      await newborn.save();
-    }
+    mainPlayer.mainPlayer = true;
+    await mainPlayer.save();
 
     // Create a new colony and associate it with the players
     const newColony = new Colony({

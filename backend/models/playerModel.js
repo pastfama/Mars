@@ -40,10 +40,13 @@ const playerSchema = new mongoose.Schema({
   inventory: [{ item: { type: String, required: true }, quantity: { type: Number, required: true, min: 0, default: 0 } }],
   relationships: [{
     player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player' },
-    relationshipType: { type: String, enum: ['friend', 'enemy', 'family', 'neutral'], default: 'neutral' },
+    relationshipType: { type: String, enum: ['friend', 'enemy', 'family', 'neutral', 'father', 'mother'], default: 'neutral' },
     trustLevel: { type: Number, min: 0, max: 100, default: 50 },
   }],
-  parents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
+  parents: [{
+    player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player' },
+    relationshipType: { type: String, enum: ['mother', 'father'] },
+  }],
   siblings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   mainPlayer: { type: Boolean, default: false },
@@ -74,5 +77,4 @@ playerSchema.methods.removeItemFromInventory = function (itemName, quantity) {
   else { console.log('Insufficient quantity or item not found'); }
 };
 
-const Player = mongoose.model('Player', playerSchema);
-module.exports = Player;
+module.exports = mongoose.model('Player', playerSchema);
