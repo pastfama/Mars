@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/GamePage.css';
+import ProfileButton from './ProfileButton';
+import RelationshipsButton from './RelationshipsButton';
+import ActivitiesButton from './ActivitiesButton';
+import AssetsButton from './AssetsButton';
+import SettingsButton from './SettingsButton';
+import ProfileSection from './ProfileSection';
 
 const GamePage = () => {
   const { id } = useParams(); // Get game ID from the URL
@@ -63,66 +69,7 @@ const GamePage = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
-        return (
-          <div className="content-section">
-            <h2>Profile</h2>
-            {mainPlayer ? (
-              <div>
-                <p>Name: {mainPlayer.player.name}</p>
-                <p>Age: {mainPlayer.player.age}</p>
-                <p>Role: {mainPlayer.role}</p>
-                <div className="characteristics">
-                  <div className="characteristic">
-                    <p>Health</p>
-                    <div className="progress-bar">
-                      <div
-                        className={`progress ${getProgressBarColor(mainPlayer.player.health)}`}
-                        style={{
-                          width: `${mainPlayer.player.health}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="characteristic">
-                    <p>Happiness</p>
-                    <div className="progress-bar">
-                      <div
-                        className={`progress ${getProgressBarColor(mainPlayer.player.happiness)}`}
-                        style={{
-                          width: `${mainPlayer.player.happiness}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="characteristic">
-                    <p>Intelligence</p>
-                    <div className="progress-bar">
-                      <div
-                        className={`progress ${getProgressBarColor(mainPlayer.player.intelligence)}`}
-                        style={{
-                          width: `${mainPlayer.player.intelligence}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="characteristic">
-                    <p>Looks</p>
-                    <div className="progress-bar">
-                      <div
-                        className={`progress ${getProgressBarColor(mainPlayer.player.looks)}`}
-                        style={{
-                          width: `${mainPlayer.player.looks}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p>No main player found</p>
-            )}
-          </div>
-        );
+        return <ProfileSection mainPlayer={mainPlayer} getProgressBarColor={getProgressBarColor} />;
       case 'Relationships':
         return (
           <div className="content-section">
@@ -159,11 +106,11 @@ const GamePage = () => {
   return (
     <div className="gamepage">
       <div className="menu">
-        <div className="menu-item" onClick={() => setActiveSection('Profile')}>Profile</div>
-        <div className="menu-item" onClick={() => setActiveSection('Relationships')}>Relationships</div>
-        <div className="menu-item" onClick={() => setActiveSection('Activities')}>Activities</div>
-        <div className="menu-item" onClick={() => setActiveSection('Assets')}>Assets</div>
-        <div className="menu-item" onClick={() => setActiveSection('Settings')}>Settings</div>
+        <ProfileButton setActiveSection={setActiveSection} />
+        <RelationshipsButton setActiveSection={setActiveSection} />
+        <ActivitiesButton setActiveSection={setActiveSection} />
+        <AssetsButton setActiveSection={setActiveSection} />
+        <SettingsButton setActiveSection={setActiveSection} />
       </div>
       <div className="content">
         {renderSection()}
