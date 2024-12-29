@@ -9,6 +9,7 @@ import SettingsButton from './SettingsButton';
 import ProfileSection from './ProfileSection';
 import RelationshipsSection from './RelationshipsSection';
 import ActivitiesSection from './ActivitiesSection';
+import AssetsSection from './AssetsSection';
 import axios from 'axios';
 
 const GamePage = () => {
@@ -90,6 +91,11 @@ const GamePage = () => {
       const response = await axios.post('http://localhost:5000/api/ageup');
       console.log('Age up response:', response);
       alert('All colony members have aged up by one year!');
+      // Refetch the updated player data
+      const updatedResponse = await fetch(`http://localhost:5000/player/${mainPlayer._id}`);
+      const updatedPlayer = await updatedResponse.json();
+      setMainPlayer(updatedPlayer);
+      setActiveSection('Profile');
     } catch (error) {
       console.error('Error aging up colony members:', error);
     }
@@ -121,7 +127,7 @@ const GamePage = () => {
         return (
           <div className="content-section">
             <h2>Assets</h2>
-            <p>Assets content goes here...</p>
+            {colony && <AssetsSection colony={colony} />}
           </div>
         );
       case 'Settings':
