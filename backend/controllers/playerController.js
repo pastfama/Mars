@@ -154,15 +154,44 @@ const getMainPlayerByColonyId = async (req, res) => {
   const { colonyId } = req.params;
 
   try {
+    console.log(`Received request to fetch main player for colony with ID: ${colonyId}`);
     const mainPlayer = await Player.findOne({ colony: colonyId, mainPlayer: true });
     if (!mainPlayer) {
+      console.error(`Main player for colony with ID ${colonyId} not found`);
       return res.status(404).json({ error: 'Main player not found' });
     }
+    console.log(`Found main player: ${mainPlayer.name}`);
     res.status(200).json({ mainPlayer });
   } catch (error) {
-    logger.logError('Error fetching main player', error);
+    console.error('Error fetching main player:', error);
     res.status(500).json({ error: 'Failed to fetch main player' });
   }
 };
 
-module.exports = { createPlayer, getPlayerById, updatePlayer, deletePlayer, ageUpColonyMembers, retireColonyMembers, getMainPlayerByColonyId };
+// Fetch relationships for a specific player
+const getPlayerRelationships = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    console.log(`Received request to fetch relationships for player with ID: ${id}`);
+    const player = await Player.findById(id).populate('relationships.player');
+    if (!player) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+    res.status(200).json({ relationships: player.relationships });
+  } catch (error) {
+    console.error('Error fetching relationships:', error);
+    res.status(500).json({ error: 'Failed to fetch relationships' });
+  }
+};
+
+module.exports = {
+  createPlayer,
+  getPlayerById,
+  updatePlayer,
+  deletePlayer,
+  ageUpColonyMembers,
+  retireColonyMembers,
+  getMainPlayerByColonyId,
+  getPlayerRelationships, // Export the new function
+};

@@ -33,12 +33,9 @@ const createGame = async (req, res) => {
     const mainPlayerGender = generateRandomGender();
     const mainPlayerName = getRandomName(mainPlayerGender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + fatherLastName;
     const mainPlayer = await createPlayer(mainPlayerName, 0, mainPlayerGender, [
-      { player: father._id, relationshipType: 'father' },
-      { player: mother._id, relationshipType: 'mother' },
-    ], [
-      { player: father._id, relationshipType: 'father' },
-      { player: mother._id, relationshipType: 'mother' },
-    ], true, null);
+      { player: father._id, relationshipType: 'father', trustLevel: 50 },
+      { player: mother._id, relationshipType: 'mother', trustLevel: 50 },
+    ], [father._id, mother._id], true, null);
     players.push(mainPlayer);
 
     // Other players
@@ -48,6 +45,20 @@ const createGame = async (req, res) => {
       const playerName = getRandomName(gender === 'male' ? '../assets/male_names.txt' : '../assets/female_names.txt') + ' ' + lastName;
       const player = await createPlayer(playerName, Math.floor(Math.random() * 30) + 20, gender, [], [], false, null);
       players.push(player);
+    }
+
+    // Create relationships
+    for (const player of players) {
+      player.relationships = players
+        .filter(p => p._id !== player._id)
+        .map(p => {
+          let relationshipType = 'other colonist';
+          if (p._id.equals(father._id)) relationshipType = 'father';
+          else if (p._id.equals(mother._id)) relationshipType = 'mother';
+          else if (p.parents.includes(player._id)) relationshipType = 'child';
+          return { player: p._id, relationshipType, trustLevel: 50 };
+        });
+      await player.save();
     }
 
     // Create colony

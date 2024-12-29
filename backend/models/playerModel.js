@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 
+const relationshipSchema = new mongoose.Schema({
+  player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', required: true },
+  relationshipType: {
+    type: String,
+    enum: ['father', 'mother', 'child', 'spouse', 'sibling', 'other colonist'],
+    default: 'other colonist',
+  },
+  trustLevel: { type: Number, default: 50 },
+});
+
 // Define the Player schema
 const playerSchema = new mongoose.Schema({
   uuid: {
@@ -38,15 +48,8 @@ const playerSchema = new mongoose.Schema({
   mood: { type: String, enum: ['happy', 'neutral', 'unhappy', 'angry'], default: 'neutral' },
   colonyPosition: { type: String, required: true, default: 'Base Camp' },
   inventory: [{ item: { type: String, required: true }, quantity: { type: Number, required: true, min: 0, default: 0 } }],
-  relationships: [{
-    player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player' },
-    relationshipType: { type: String, enum: ['friend', 'enemy', 'family', 'neutral', 'father', 'mother'], default: 'neutral' },
-    trustLevel: { type: Number, min: 0, max: 100, default: 50 },
-  }],
-  parents: [{
-    player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player' },
-    relationshipType: { type: String, enum: ['mother', 'father'] },
-  }],
+  relationships: [relationshipSchema],
+  parents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   siblings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   mainPlayer: { type: Boolean, default: false },
@@ -54,7 +57,7 @@ const playerSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
   deceased: { type: Boolean, default: false },
   causeOfDeath: { type: String, default: null },
-  colony: { type: String, default: 'Mars Colony' },
+  colony: { type: mongoose.Schema.Types.ObjectId, ref: 'Colony' },
 });
 
 // Middleware to update `updatedAt` before save

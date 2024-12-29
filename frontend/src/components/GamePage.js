@@ -19,6 +19,7 @@ const GamePage = () => {
   const [colony, setColony] = useState(null);
   const [players, setPlayers] = useState([]);
   const [mainPlayer, setMainPlayer] = useState(null);
+  const [relationships, setRelationships] = useState([]);
   const [activeSection, setActiveSection] = useState('Profile');
   const [summary, setSummary] = useState(null);
 
@@ -53,6 +54,7 @@ const GamePage = () => {
         setColony(data.colony);
         setPlayers(data.colony.players);
         identifyMainPlayer(data.colony._id);
+        setRelationships(data.colony.players.flatMap(player => player.relationships || []));
       } else {
         console.error('Colony not found');
       }
@@ -126,7 +128,7 @@ const GamePage = () => {
           <div className="content-section">
             <h2>Relationships</h2>
             {mainPlayer && mainPlayer._id && (
-              <RelationshipsSection mainPersonId={mainPlayer._id} />
+              <RelationshipsSection playerId={mainPlayer._id} />
             )}
           </div>
         );
