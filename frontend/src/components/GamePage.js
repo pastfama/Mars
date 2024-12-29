@@ -78,7 +78,7 @@ const GamePage = () => {
 
   const handleAgeUp = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/ageUpColonyMembers', { colonyId: colony._id });
+      const response = await axios.post('http://localhost:5000/player/ageUpColonyMembers', { colonyId: colony._id });
       setSummary(response.data.summary);
       fetchColony(colony._id); // Fetch updated colony data
     } catch (error) {
