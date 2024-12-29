@@ -103,4 +103,18 @@ const ageUpColonyMembers = async (req, res) => {
   }
 };
 
-module.exports = { createPlayer, getPlayerById, updatePlayer, deletePlayer, ageUpColonyMembers };
+// POST: Retire colony members
+const retireColonyMembers = async (req, res) => {
+  logger.logDebug('Received request to retire colony members');
+
+  try {
+    const retiredPlayers = await Player.updateMany({ age: { $gte: 65 } }, { status: 'retired' });
+    logger.logDebug('Colony members have been retired', { retiredPlayers });
+    res.status(200).json({ message: 'Colony members have been retired', retiredPlayers });
+  } catch (error) {
+    logger.logError('Error retiring colony members', error);
+    res.status(500).json({ error: 'Failed to retire colony members' });
+  }
+};
+
+module.exports = { createPlayer, getPlayerById, updatePlayer, deletePlayer, ageUpColonyMembers, retireColonyMembers };

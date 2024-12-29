@@ -101,6 +101,20 @@ const GamePage = () => {
     }
   };
 
+  const handleRetire = async (destination) => {
+    console.log('handleRetire called');
+    try {
+      const response = await axios.post('http://localhost:5000/api/retire', { destination });
+      console.log('Retire response:', response);
+      alert(`Colony members have been retired to ${destination}!`);
+      // Refetch the updated colony data
+      fetchColony(colony._id);
+      setActiveSection('Profile');
+    } catch (error) {
+      console.error('Error retiring colony members:', error);
+    }
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -154,7 +168,13 @@ const GamePage = () => {
       <div className="content">
         {renderSection()}
         <div className="age-up-button-container" style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button onClick={handleAgeUp}>Age Up</button>
+          <button className="age-up-button" onClick={handleAgeUp}>Age Up</button>
+          {mainPlayer && mainPlayer.age >= 60 && (
+            <>
+              <button className="retire-button" onClick={() => handleRetire('earth')}>Retire to Earth</button>
+              <button className="retire-button" onClick={() => handleRetire('mars')}>Retire on Mars</button>
+            </>
+          )}
         </div>
       </div>
     </div>
