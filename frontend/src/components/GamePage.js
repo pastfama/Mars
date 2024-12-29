@@ -18,9 +18,7 @@ const GamePage = () => {
   const [relationships, setRelationships] = useState([]);
   const [activeSection, setActiveSection] = useState('Profile');
   const [summary, setSummary] = useState(null);
-  const [isVotingYear, setIsVotingYear] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [yearsTillElections, setYearsTillElections] = useState(0);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -54,12 +52,6 @@ const GamePage = () => {
         setPlayers(data.colony.players);
         identifyMainPlayer(data.colony._id);
         setRelationships(data.colony.players.flatMap(player => player.relationships || []));
-        checkVotingYear(data.colony.yearsTillElection); // Use yearsTillElection
-
-        // Check if the leader is null and trigger elections if necessary
-        if (!data.colony.leader || data.colony.yearsTillElection === undefined) {
-          await handleElections(data.colony._id);
-        }
       } else {
         console.error('Colony not found');
       }
@@ -70,7 +62,7 @@ const GamePage = () => {
 
   const identifyMainPlayer = async (colonyId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/player/main/${colonyId}`);
+      const response = await axios.get(`http://localhost:5000/players/main/${colonyId}`);
       const main = response.data.mainPlayer;
       if (main) {
         console.log('Found main player:', main.name);
@@ -86,32 +78,14 @@ const GamePage = () => {
   const handleAgeUp = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/player/ageUpColonyMembers', { colonyId: colony._id });
+      const response = await axios.post('http://localhost:5000/players/ageUpColonyMembers', { colonyId: colony._id });
       setSummary(response.data.summary);
       fetchColony(colony._id); // Fetch updated colony data
-      checkVotingYear(response.data.summary.yearsTillElection); // Check if it's a voting year
     } catch (error) {
       console.error('Error aging up colony members:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleElections = async (colonyId) => {
-    try {
-      console.log(`Received POST request for /${colonyId}/elections`);
-      const response = await axios.post(`http://localhost:5000/colony/${colonyId}/elections`);
-      console.log('Elections response:', response.data);
-      fetchColony(colonyId); // Fetch updated colony data
-    } catch (error) {
-      console.error('Error handling elections:', error);
-    }
-  };
-
-  const checkVotingYear = (yearsTillElection) => {
-    console.log('Years till election:', yearsTillElection);
-    setIsVotingYear(yearsTillElection === 0);
-    setYearsTillElections(yearsTillElection);
   };
 
   const getProgressBarColor = (value) => {
@@ -163,10 +137,7 @@ const GamePage = () => {
           <div className="content-section">
             <h2>Activities</h2>
             {mainPlayer && mainPlayer._id && (
-              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} isVotingYear={isVotingYear} />
-            )}
-            {isVotingYear && mainPlayer && mainPlayer.age >= 18 && (
-              <button className="election-button" onClick={() => handleElections(colony._id)}>Hold Elections</button>
+              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} />
             )}
           </div>
         );
@@ -175,10 +146,7 @@ const GamePage = () => {
           <div className="content-section">
             <h2>Assets</h2>
             {colony && (
-              <>
-                <AssetsSection colony={colony} />
-                {colony.leader && <p>Current Leader: {colony.leader.name}</p>}
-              </>
+              <AssetsSection colony={colony} />
             )}
           </div>
         );
@@ -196,14 +164,13 @@ const GamePage = () => {
 
   return (
     <div className="gamepage">
-      <Menu setActiveSection={setActiveSection} colony={colony} yearsTillElections={yearsTillElections} />
+      <Menu setActiveSection={setActiveSection} />
       <div className="content">
         {renderSection()}
         <AgeUpButtonContainer
           handleAgeUp={handleAgeUp}
           loading={loading}
           summary={summary}
-          isVotingYear={isVotingYear}
           mainPlayer={mainPlayer}
           handleRetire={handleRetire}
           setSummary={setSummary} // Pass setSummary to AgeUpButtonContainer

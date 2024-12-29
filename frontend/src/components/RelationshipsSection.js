@@ -15,7 +15,7 @@ const RelationshipsSection = ({ playerId }) => {
 
     const fetchRelationships = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/player/${playerId}/relationships`);
+        const response = await axios.get(`http://localhost:5000/players/${playerId}/relationships`);
         setRelationships(response.data.relationships);
       } catch (error) {
         console.error('Error fetching relationships:', error);

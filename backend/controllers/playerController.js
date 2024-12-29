@@ -1,5 +1,6 @@
 const logger = require('../utils/logger');
 const Player = require('../models/playerModel'); // Assuming you have a Player model set up
+const mongoose = require('mongoose');
 
 // POST: Create a new player
 const createPlayer = async (req, res) => {
@@ -150,11 +151,15 @@ const retireColonyMembers = async (req, res) => {
   }
 };
 
-const getMainPlayerByColonyId = async (req, res) => {
+// Get main player by colony ID
+const getMainPlayer = async (req, res) => {
   const { colonyId } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(colonyId)) {
+    return res.status(400).json({ message: 'Invalid colony ID' });
+  }
+
   try {
-    console.log(`Received request to fetch main player for colony with ID: ${colonyId}`);
     const mainPlayer = await Player.findOne({ colony: colonyId, mainPlayer: true });
     if (!mainPlayer) {
       console.error(`Main player for colony with ID ${colonyId} not found`);
@@ -192,6 +197,6 @@ module.exports = {
   deletePlayer,
   ageUpColonyMembers,
   retireColonyMembers,
-  getMainPlayerByColonyId,
-  getPlayerRelationships, // Export the new function
+  getMainPlayer, // Correctly export the function
+  getPlayerRelationships,
 };

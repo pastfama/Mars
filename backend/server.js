@@ -1,6 +1,7 @@
 require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose'); // Mongoose for MongoDB connection
 const logger = require('./utils/logger'); // Import the logger
 const playerRoutes = require('./routes/playerRoutes'); // Import player routes
@@ -16,8 +17,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware setup
-app.use(cors());
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Request logging middleware for debugging
 app.use((req, res, next) => {
@@ -52,14 +54,14 @@ app.get('/', (req, res) => {
 });
 
 // Register routes
-app.use('/player', playerRoutes);
+app.use('/players', playerRoutes);
 app.use('/game', gameRoutes);
-app.use('/colony', colonyRoutes); // Ensure the /colony route is correctly registered
+app.use('/colony', colonyRoutes);
 app.use('/events', eventsRoutes);
 app.use('/research', researchRoutes);
 app.use('/missions', missionsRoutes);
-app.use('/activities', activitiesRoutes); // Register activities routes
-app.use('/api', ageUpRoutes); // Correctly register the new route
+app.use('/activities', activitiesRoutes);
+app.use('/ageUp', ageUpRoutes);
 
 // Handle 404 - Route not found
 app.use((req, res, next) => {
@@ -69,20 +71,11 @@ app.use((req, res, next) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-  logger.logError(err);
+  logger.logError('Global error handler', err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// Start server and listen for incoming requests
-const server = app.listen(PORT, () => {
-  logger.logDebug(`Server running on http://localhost:${PORT}`);
-});
-
-// Graceful shutdown on process interrupt (Ctrl+C)
-process.on('SIGINT', () => {
-  console.log('Gracefully shutting down');
-  server.close(() => {
-    console.log('Closed out remaining connections');
-    process.exit(0);
-  });
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -3,12 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 
 const relationshipSchema = new mongoose.Schema({
   player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', required: true },
-  relationshipType: {
-    type: String,
-    enum: ['father', 'mother', 'child', 'spouse', 'sibling', 'other colonist'],
-    default: 'other colonist',
-  },
-  trustLevel: { type: Number, default: 50 },
+  relationshipType: { type: String, enum: ['parent', 'sibling', 'relative', 'friend', 'father', 'mother'], required: true },
+  trustLevel: { type: Number, required: true, min: 0, max: 100, default: 50 },
 });
 
 // Define the Player schema
@@ -83,4 +79,6 @@ playerSchema.methods.removeItemFromInventory = function (itemName, quantity) {
   else { console.log('Insufficient quantity or item not found'); }
 };
 
-module.exports = mongoose.model('Player', playerSchema);
+const Player = mongoose.model('Player', playerSchema);
+
+module.exports = Player;

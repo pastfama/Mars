@@ -82,7 +82,7 @@ const createColony = async (req, res) => {
       gameId,
       players: players.map(player => ({ player: player._id, role: 'colonist' })),
       leader: oldestPlayer._id,
-      yearsTillElection: 4,
+      yearsTillElection: 0, // Set years till next election to 0
     });
     await newColony.save();
 
@@ -118,16 +118,16 @@ const handleElections = async (req, res) => {
       return res.status(400).json({ message: 'No players in colony' });
     }
 
-    const adultPlayers = colony.players.filter(player => player.age >= 18);
+    const adultPlayers = colony.players.filter(player => player.player.age >= 18);
     const votes = {};
 
     adultPlayers.forEach(voter => {
-      const relationships = voter.relationships.filter(rel => rel.trustLevel > 0);
+      const relationships = voter.player.relationships.filter(rel => rel.trustLevel > 0);
       relationships.forEach(rel => {
-        if (!votes[rel.player._id]) {
-          votes[rel.player._id] = 0;
+        if (!votes[rel.player]) {
+          votes[rel.player] = 0;
         }
-        votes[rel.player._id] += rel.trustLevel;
+        votes[rel.player] += rel.trustLevel;
       });
     });
 
@@ -135,9 +135,9 @@ const handleElections = async (req, res) => {
     if (Object.keys(votes).length === 0) {
       // If no votes are cast, choose the oldest player as the leader
       const oldestPlayer = adultPlayers.reduce((oldest, player) => {
-        return (player.age > oldest.age) ? player : oldest;
+        return (player.player.age > oldest.player.age) ? player : oldest;
       }, adultPlayers[0]);
-      newLeaderId = oldestPlayer._id;
+      newLeaderId = oldestPlayer.player._id;
       console.log(`No votes cast. Oldest player ${newLeaderId} selected as leader.`);
     } else {
       newLeaderId = Object.keys(votes).reduce((a, b) => (votes[a] > votes[b] ? a : b));
@@ -145,13 +145,69 @@ const handleElections = async (req, res) => {
     }
 
     colony.leader = newLeaderId;
-    colony.yearsTillElection = 4; // Reset years till next election
+    colony.yearsTillElection = 4;
     await colony.save();
 
-    res.status(200).json({ message: 'Elections completed successfully', newLeaderId });
+    res.status(200).json({ message: 'Elections completed successfully', newLeaderId, yearsTillElection: colony.yearsTillElection });
   } catch (error) {
     console.error('Error handling elections:', error);
-    res.status(500).json({ error: 'Failed to handle elections' });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Failed to handle elections' });
+    }
+  }
+};
+
+// Check if it's an election year and trigger elections if necessary
+const checkElectionYear = async (req, res) => {
+  const { colonyId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(colonyId)) {
+    return res.status(400).json({ message: 'Invalid colony ID' });
+  }
+
+  try {
+    const colony = await Colony.findById(colonyId).populate('players.player');
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+
+    if (colony.yearsTillElection === 0) {
+      // Trigger elections
+      const votes = {};
+      const adultPlayers = colony.players.filter(player => player.player.age >= 18);
+
+      adultPlayers.forEach(voter => {
+        const relationships = voter.player.relationships.filter(rel => rel.trustLevel > 0);
+        relationships.forEach(rel => {
+          if (!votes[rel.player]) {
+            votes[rel.player] = 0;
+          }
+          votes[rel.player] += rel.trustLevel;
+        });
+      });
+
+      let newLeaderId;
+      if (Object.keys(votes).length === 0) {
+        // If no votes are cast, choose the oldest player as the leader
+        const oldestPlayer = adultPlayers.reduce((oldest, player) => {
+          return (player.player.age > oldest.player.age) ? player : oldest;
+        }, adultPlayers[0]);
+        newLeaderId = oldestPlayer.player._id;
+      } else {
+        newLeaderId = Object.keys(votes).reduce((a, b) => (votes[a] > votes[b] ? a : b));
+      }
+
+      colony.leader = newLeaderId;
+      colony.yearsTillElection = 4;
+      await colony.save();
+
+      return res.status(200).json({ message: 'Elections completed successfully', newLeaderId, yearsTillElection: colony.yearsTillElection });
+    } else {
+      return res.status(200).json({ message: 'Not an election year', yearsTillElection: colony.yearsTillElection });
+    }
+  } catch (error) {
+    console.error('Error checking election year:', error);
+    res.status(500).json({ message: 'Failed to check election year' });
   }
 };
 
@@ -243,13 +299,13 @@ const castVote = async (req, res) => {
       return res.status(404).json({ message: 'Colony not found' });
     }
 
-    const voter = colony.players.find(player => player._id.equals(voterId));
-    if (!voter || voter.age < 18) {
+    const voter = colony.players.find(player => player.player._id.equals(voterId));
+    if (!voter || voter.player.age < 18) {
       return res.status(400).json({ message: 'Invalid voter' });
     }
 
-    const candidate = colony.players.find(player => player._id.equals(candidateId));
-    if (!candidate || candidate.age < 18) {
+    const candidate = colony.players.find(player => player.player._id.equals(candidateId));
+    if (!candidate || candidate.player.age < 18) {
       return res.status(400).json({ message: 'Invalid candidate' });
     }
 
@@ -279,4 +335,5 @@ module.exports = {
   handleElections,
   getCandidates,
   castVote,
+  checkElectionYear,
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createColony, getColony, updateColony, deleteColony, handleElections, getCandidates, castVote } = require('../controllers/colonyController');
+const { createColony, getColony, updateColony, deleteColony, handleElections, getCandidates, castVote, checkElectionYear } = require('../controllers/colonyController');
 const router = express.Router();
 
 // Middleware to log request details
@@ -35,5 +35,8 @@ router.get('/:colonyId/candidates', getCandidates);
 
 // Route to cast a vote in a colony
 router.post('/:colonyId/vote', castVote);
+
+// Check if it's an election year and trigger elections if necessary
+router.get('/:colonyId/checkElectionYear', checkElectionYear);
 
 module.exports = router;
