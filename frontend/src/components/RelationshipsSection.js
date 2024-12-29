@@ -49,7 +49,7 @@ const RelationshipsSection = ({ playerId }) => {
                 aria-controls={`submenu-${relationship.player._id}`}
                 aria-expanded={openSubmenu === relationship.player._id}
               >
-                {relationship.player.name} ({relationship.relationshipType})
+                {relationship.player.name} ({relationship.relationshipType}, Age: {relationship.player.age})
               </Button>
               <div className="relationship-bar">
                 <div
