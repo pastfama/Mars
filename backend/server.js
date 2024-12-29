@@ -10,6 +10,7 @@ const eventsRoutes = require('./routes/eventsRoutes'); // Import events routes
 const researchRoutes = require('./routes/researchRoutes'); // Import research routes
 const missionsRoutes = require('./routes/missionsRoutes'); // Import missions routes
 const activitiesRoutes = require('./routes/activitiesRoutes'); // Import activities routes
+const ageUpRoutes = require('./routes/ageUpRoutes'); // Import age up routes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -58,6 +59,7 @@ app.use('/events', eventsRoutes);
 app.use('/research', researchRoutes);
 app.use('/missions', missionsRoutes);
 app.use('/activities', activitiesRoutes); // Register activities routes
+app.use('/api', ageUpRoutes); // Correctly register the new route
 
 // Handle 404 - Route not found
 app.use((req, res, next) => {

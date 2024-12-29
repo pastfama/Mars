@@ -9,6 +9,7 @@ import SettingsButton from './SettingsButton';
 import ProfileSection from './ProfileSection';
 import RelationshipsSection from './RelationshipsSection';
 import ActivitiesSection from './ActivitiesSection';
+import axios from 'axios';
 
 const GamePage = () => {
   const { id } = useParams(); // Get game ID from the URL
@@ -83,6 +84,17 @@ const GamePage = () => {
     });
   };
 
+  const handleAgeUp = async () => {
+    console.log('handleAgeUp called');
+    try {
+      const response = await axios.post('http://localhost:5000/api/ageup');
+      console.log('Age up response:', response);
+      alert('All colony members have aged up by one year!');
+    } catch (error) {
+      console.error('Error aging up colony members:', error);
+    }
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'Profile':
@@ -135,6 +147,9 @@ const GamePage = () => {
       </div>
       <div className="content">
         {renderSection()}
+        <div className="age-up-button-container" style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button onClick={handleAgeUp}>Age Up</button>
+        </div>
       </div>
     </div>
   );

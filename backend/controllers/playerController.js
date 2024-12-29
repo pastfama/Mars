@@ -89,4 +89,18 @@ const deletePlayer = async (req, res) => {
   }
 };
 
-module.exports = { createPlayer, getPlayerById, updatePlayer, deletePlayer };
+// POST: Age up all colony members by one year
+const ageUpColonyMembers = async (req, res) => {
+  logger.logDebug('Received request to age up all colony members');
+
+  try {
+    await Player.updateMany({}, { $inc: { age: 1 } });
+    logger.logDebug('All colony members have aged up by one year');
+    res.status(200).json({ message: 'All colony members have aged up by one year' });
+  } catch (error) {
+    logger.logError('Error aging up colony members', error);
+    res.status(500).json({ error: 'Failed to age up colony members' });
+  }
+};
+
+module.exports = { createPlayer, getPlayerById, updatePlayer, deletePlayer, ageUpColonyMembers };
