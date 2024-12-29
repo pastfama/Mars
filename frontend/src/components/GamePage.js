@@ -22,6 +22,8 @@ const GamePage = () => {
   const [relationships, setRelationships] = useState([]);
   const [activeSection, setActiveSection] = useState('Profile');
   const [summary, setSummary] = useState(null);
+  const [isVotingYear, setIsVotingYear] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -36,6 +38,7 @@ const GamePage = () => {
         console.log('Fetched game:', data.game);
         setGame(data.game);
         fetchColony(data.game.colony);
+        checkVotingYear(data.game.year);
       } else {
         console.error('Game not found');
       }
@@ -79,13 +82,29 @@ const GamePage = () => {
   };
 
   const handleAgeUp = async () => {
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/player/ageUpColonyMembers', { colonyId: colony._id });
       setSummary(response.data.summary);
       fetchColony(colony._id); // Fetch updated colony data
     } catch (error) {
       console.error('Error aging up colony members:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleElections = async () => {
+    try {
+      await axios.post(`http://localhost:5000/colony/${colony._id}/elections`);
+      fetchColony(colony._id); // Fetch updated colony data
+    } catch (error) {
+      console.error('Error handling elections:', error);
+    }
+  };
+
+  const checkVotingYear = (year) => {
+    setIsVotingYear(year % 4 === 0);
   };
 
   const getProgressBarColor = (value) => {
@@ -137,7 +156,7 @@ const GamePage = () => {
           <div className="content-section">
             <h2>Activities</h2>
             {mainPlayer && mainPlayer._id && (
-              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} />
+              <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} isVotingYear={isVotingYear} />
             )}
           </div>
         );
@@ -172,7 +191,12 @@ const GamePage = () => {
       <div className="content">
         {renderSection()}
         <div className="age-up-button-container" style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button className="age-up-button" onClick={handleAgeUp}>Age Up</button>
+          <button className="age-up-button" onClick={handleAgeUp} disabled={loading}>
+            {loading ? 'Aging Up...' : 'Age Up'}
+          </button>
+          {isVotingYear && mainPlayer && mainPlayer.age >= 18 && (
+            <button className="election-button" onClick={handleElections}>Hold Elections</button>
+          )}
           {summary && <AgeUpSummaryPopup summary={summary} onClose={() => setSummary(null)} />}
           {mainPlayer && mainPlayer.age >= 60 && (
             <>

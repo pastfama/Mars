@@ -1,6 +1,6 @@
 const express = require('express');
+const { createColony, getColony, updateColony, deleteColony, handleElections, getCandidates, castVote } = require('../controllers/colonyController');
 const router = express.Router();
-const { createColony, getColony, updateColony, deleteColony } = require('../controllers/colonyController');
 
 // Middleware to log request details
 const logRequestDetails = (req, res, next) => {
@@ -26,5 +26,14 @@ router.put('/:id', updateColony);
 
 // Route to delete a colony by ID
 router.delete('/:id', deleteColony);
+
+// Route to handle elections for a colony
+router.post('/:colonyId/elections', handleElections);
+
+// Route to get candidates for a colony
+router.get('/:colonyId/candidates', getCandidates);
+
+// Route to cast a vote in a colony
+router.post('/:colonyId/vote', castVote);
 
 module.exports = router;
