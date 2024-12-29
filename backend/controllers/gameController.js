@@ -1,4 +1,5 @@
 const { getRandomName, generateRandomGender } = require('../utils/generateName');
+const { v4: uuidv4 } = require('uuid'); // Import uuidv4
 const Game = require('../models/game');
 const Colony = require('../models/colonyModel');
 const Player = require('../models/playerModel');
@@ -61,42 +62,45 @@ const createGame = async (req, res) => {
       await player.save();
     }
 
-    // Create colony
-    const colony = new Colony({
-      name: colonyName,
-      players: players.map(player => ({ player: player._id })),
-    });
-    await colony.save();
+    // Find the oldest player to be the leader
+    const oldestPlayer = players.reduce((oldest, player) => {
+      return (player.age > oldest.age) ? player : oldest;
+    }, players[0]);
 
-    // Update players with colony ID
+    // Create the colony
+    const newColony = new Colony({
+      colonyId: uuidv4(),
+      name: colonyName,
+      gameId: null, // This will be set after the game is created
+      players: players.map(player => ({ player: player._id, role: 'colonist' })),
+      leader: oldestPlayer._id,
+      yearsTillElection: 4,
+    });
+    await newColony.save();
+
+    // Update players with the colony ID
     for (const player of players) {
-      player.colony = colony._id;
+      player.colony = newColony._id;
       await player.save();
     }
 
-    // Create game
-    const game = new Game({
+    // Create the game
+    const newGame = new Game({
       name,
       description,
-      colony: colony._id,
+      colony: newColony._id,
     });
-    await game.save();
+    await newGame.save();
 
-    res.status(201).json({ game });
+    // Update the colony with the game ID
+    newColony.gameId = newGame._id;
+    await newColony.save();
+
+    console.log('Created game:', newGame);
+    res.status(201).json({ game: newGame });
   } catch (error) {
     console.error('Error creating game:', error);
-    res.status(500).json({ error: 'Failed to create game' });
-  }
-};
-
-// Controller to get all games
-const getAllGames = async (req, res) => {
-  try {
-    const games = await Game.find();
-    res.status(200).json({ games });
-  } catch (error) {
-    console.error('Error fetching games:', error);
-    res.status(500).json({ error: 'Failed to fetch games' });
+    res.status(500).json({ message: 'Failed to create game' });
   }
 };
 
@@ -107,12 +111,40 @@ const getGame = async (req, res) => {
   try {
     const game = await Game.findById(id).populate('colony');
     if (!game) {
-      return res.status(404).json({ error: 'Game not found' });
+      return res.status(404).json({ message: 'Game not found' });
     }
     res.status(200).json({ game });
   } catch (error) {
     console.error('Error fetching game:', error);
-    res.status(500).json({ error: 'Failed to fetch game' });
+    res.status(500).json({ message: 'Failed to fetch game' });
+  }
+};
+
+// Controller to get all games
+const getAllGames = async (req, res) => {
+  try {
+    const games = await Game.find().populate('colony');
+    res.status(200).json({ games });
+  } catch (error) {
+    console.error('Error fetching games:', error);
+    res.status(500).json({ message: 'Failed to fetch games' });
+  }
+};
+
+// Controller to update a game by ID
+const updateGame = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const game = await Game.findByIdAndUpdate(id, updateData, { new: true }).populate('colony');
+    if (!game) {
+      return res.status(404).json({ message: 'Game not found' });
+    }
+    res.status(200).json({ game });
+  } catch (error) {
+    console.error('Error updating game:', error);
+    res.status(500).json({ message: 'Failed to update game' });
   }
 };
 
@@ -121,33 +153,24 @@ const deleteGame = async (req, res) => {
   const { id } = req.params;
 
   try {
-    console.log(`Received request to delete game with ID: ${id}`);
-
-    // Find the game
-    const game = await Game.findById(id);
+    const game = await Game.findByIdAndDelete(id);
     if (!game) {
-      return res.status(404).json({ error: 'Game not found' });
+      return res.status(404).json({ message: 'Game not found' });
     }
-
-    // Find the associated colony
-    const colony = await Colony.findById(game.colony);
-    if (colony) {
-      // Delete all players associated with the colony
-      await Player.deleteMany({ _id: { $in: colony.players.map(p => p.player) } });
-
-      // Delete the colony
-      await Colony.findByIdAndDelete(game.colony);
-    }
-
-    // Delete the game
-    await Game.findByIdAndDelete(id);
-
-    console.log(`Deleted game with ID: ${id}`);
-    res.status(200).json({ message: 'Game and associated entities deleted successfully' });
+    // Optionally, delete associated colony and players
+    await Colony.findByIdAndDelete(game.colony);
+    await Player.deleteMany({ colony: game.colony });
+    res.status(200).json({ message: 'Game and associated colony and players deleted successfully' });
   } catch (error) {
     console.error('Error deleting game:', error);
-    res.status(500).json({ error: 'Failed to delete game' });
+    res.status(500).json({ message: 'Failed to delete game' });
   }
 };
 
-module.exports = { createGame, getAllGames, getGame, deleteGame };
+module.exports = {
+  createGame,
+  getGame,
+  getAllGames,
+  updateGame,
+  deleteGame,
+};

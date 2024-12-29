@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import '../styles/ActivitiesSection.css';
+import '../styles/ActivitiesSection.css'; // Update this path if necessary
 
 const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, isVotingYear }) => {
   const [activities, setActivities] = useState([]);
@@ -72,6 +72,11 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, is
   return (
     <div className="activities-section">
       <h2>Activities</h2>
+      {activities.map(activity => (
+        <Button key={activity.name} onClick={() => handleActivityClick(activity)}>
+          {activity.name}
+        </Button>
+      ))}
       {isVotingYear && mainPlayer.age >= 18 && (
         <div className="voting-section">
           <h3>Election Year! Cast Your Vote</h3>
@@ -91,22 +96,6 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, is
           </div>
           <Button onClick={handleVote} disabled={!selectedCandidate}>Vote</Button>
         </div>
-      )}
-      {activities.length > 0 ? (
-        <ul>
-          {activities.map((activity, index) => (
-            <li key={index}>
-              <button
-                onClick={() => handleActivityClick(activity)}
-                disabled={usedActivities[activity.name] >= 2}
-              >
-                {activity.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No activities available for this life stage.</p>
       )}
     </div>
   );

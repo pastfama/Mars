@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/GamePage.css';
-import ProfileButton from './ProfileButton';
-import RelationshipsButton from './RelationshipsButton';
-import ActivitiesButton from './ActivitiesButton';
-import AssetsButton from './AssetsButton';
-import SettingsButton from './SettingsButton';
+import Menu from './Menu';
+import AgeUpButtonContainer from './AgeUpButtonContainer';
 import ProfileSection from './ProfileSection';
 import RelationshipsSection from './RelationshipsSection';
 import ActivitiesSection from './ActivitiesSection';
 import AssetsSection from './AssetsSection';
-import AgeUpSummaryPopup from './AgeUpSummaryPopup';
 import axios from 'axios';
 
 const GamePage = () => {
@@ -24,6 +20,7 @@ const GamePage = () => {
   const [summary, setSummary] = useState(null);
   const [isVotingYear, setIsVotingYear] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [yearsTillElections, setYearsTillElections] = useState(0);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -38,7 +35,6 @@ const GamePage = () => {
         console.log('Fetched game:', data.game);
         setGame(data.game);
         fetchColony(data.game.colony);
-        checkVotingYear(data.game.year);
       } else {
         console.error('Game not found');
       }
@@ -58,6 +54,12 @@ const GamePage = () => {
         setPlayers(data.colony.players);
         identifyMainPlayer(data.colony._id);
         setRelationships(data.colony.players.flatMap(player => player.relationships || []));
+        checkVotingYear(data.colony.yearsTillElection); // Use yearsTillElection
+
+        // Check if the leader is null and trigger elections if necessary
+        if (!data.colony.leader || data.colony.yearsTillElection === undefined) {
+          await handleElections(data.colony._id);
+        }
       } else {
         console.error('Colony not found');
       }
@@ -87,6 +89,7 @@ const GamePage = () => {
       const response = await axios.post('http://localhost:5000/player/ageUpColonyMembers', { colonyId: colony._id });
       setSummary(response.data.summary);
       fetchColony(colony._id); // Fetch updated colony data
+      checkVotingYear(response.data.summary.yearsTillElection); // Check if it's a voting year
     } catch (error) {
       console.error('Error aging up colony members:', error);
     } finally {
@@ -94,17 +97,21 @@ const GamePage = () => {
     }
   };
 
-  const handleElections = async () => {
+  const handleElections = async (colonyId) => {
     try {
-      await axios.post(`http://localhost:5000/colony/${colony._id}/elections`);
-      fetchColony(colony._id); // Fetch updated colony data
+      console.log(`Received POST request for /${colonyId}/elections`);
+      const response = await axios.post(`http://localhost:5000/colony/${colonyId}/elections`);
+      console.log('Elections response:', response.data);
+      fetchColony(colonyId); // Fetch updated colony data
     } catch (error) {
       console.error('Error handling elections:', error);
     }
   };
 
-  const checkVotingYear = (year) => {
-    setIsVotingYear(year % 4 === 0);
+  const checkVotingYear = (yearsTillElection) => {
+    console.log('Years till election:', yearsTillElection);
+    setIsVotingYear(yearsTillElection === 0);
+    setYearsTillElections(yearsTillElection);
   };
 
   const getProgressBarColor = (value) => {
@@ -158,13 +165,21 @@ const GamePage = () => {
             {mainPlayer && mainPlayer._id && (
               <ActivitiesSection mainPlayer={mainPlayer} updatePlayerStats={updatePlayerStats} setActiveSection={setActiveSection} isVotingYear={isVotingYear} />
             )}
+            {isVotingYear && mainPlayer && mainPlayer.age >= 18 && (
+              <button className="election-button" onClick={() => handleElections(colony._id)}>Hold Elections</button>
+            )}
           </div>
         );
       case 'Assets':
         return (
           <div className="content-section">
             <h2>Assets</h2>
-            {colony && <AssetsSection colony={colony} />}
+            {colony && (
+              <>
+                <AssetsSection colony={colony} />
+                {colony.leader && <p>Current Leader: {colony.leader.name}</p>}
+              </>
+            )}
           </div>
         );
       case 'Settings':
@@ -181,30 +196,18 @@ const GamePage = () => {
 
   return (
     <div className="gamepage">
-      <div className="menu">
-        <ProfileButton setActiveSection={setActiveSection} />
-        <RelationshipsButton setActiveSection={setActiveSection} />
-        <ActivitiesButton setActiveSection={setActiveSection} />
-        <AssetsButton setActiveSection={setActiveSection} />
-        <SettingsButton setActiveSection={setActiveSection} />
-      </div>
+      <Menu setActiveSection={setActiveSection} colony={colony} yearsTillElections={yearsTillElections} />
       <div className="content">
         {renderSection()}
-        <div className="age-up-button-container" style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button className="age-up-button" onClick={handleAgeUp} disabled={loading}>
-            {loading ? 'Aging Up...' : 'Age Up'}
-          </button>
-          {isVotingYear && mainPlayer && mainPlayer.age >= 18 && (
-            <button className="election-button" onClick={handleElections}>Hold Elections</button>
-          )}
-          {summary && <AgeUpSummaryPopup summary={summary} onClose={() => setSummary(null)} />}
-          {mainPlayer && mainPlayer.age >= 60 && (
-            <>
-              <button className="retire-button" onClick={() => handleRetire('earth')}>Retire to Earth</button>
-              <button className="retire-button" onClick={() => handleRetire('mars')}>Retire on Mars</button>
-            </>
-          )}
-        </div>
+        <AgeUpButtonContainer
+          handleAgeUp={handleAgeUp}
+          loading={loading}
+          summary={summary}
+          isVotingYear={isVotingYear}
+          mainPlayer={mainPlayer}
+          handleRetire={handleRetire}
+          setSummary={setSummary} // Pass setSummary to AgeUpButtonContainer
+        />
       </div>
     </div>
   );

@@ -71,12 +71,18 @@ const createColony = async (req, res) => {
       await player.save();
     }
 
+    // Find the oldest player to be the leader
+    const oldestPlayer = players.reduce((oldest, player) => {
+      return (player.age > oldest.age) ? player : oldest;
+    }, players[0]);
+
     const newColony = new Colony({
       colonyId: uuidv4(),
       name,
       gameId,
       players: players.map(player => ({ player: player._id, role: 'colonist' })),
-      leader: father._id,
+      leader: oldestPlayer._id,
+      yearsTillElection: 4,
     });
     await newColony.save();
 
@@ -93,60 +99,6 @@ const createColony = async (req, res) => {
   }
 };
 
-// Get a colony by ID
-const getColony = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    console.log(`Received request to fetch colony with ID: ${id}`);
-    const colony = await Colony.findById(id).populate('players.player');
-    if (!colony) {
-      return res.status(404).json({ message: 'Colony not found' });
-    }
-    res.status(200).json({ colony });
-  } catch (error) {
-    console.error('Error fetching colony:', error);
-    res.status(500).json({ error: 'Failed to fetch colony' });
-  }
-};
-
-// Update a colony by ID
-const updateColony = async (req, res) => {
-  const { id } = req.params;
-  const updateData = req.body;
-
-  try {
-    console.log(`Received request to update colony with ID: ${id}`);
-    const colony = await Colony.findByIdAndUpdate(id, updateData, { new: true }).populate('players.player').populate('leader');
-    if (!colony) {
-      return res.status(404).json({ message: 'Colony not found' });
-    }
-    res.status(200).json({ colony });
-  } catch (error) {
-    console.error('Error updating colony:', error);
-    res.status(500).json({ error: 'Failed to update colony' });
-  }
-};
-
-// Delete a colony by ID
-const deleteColony = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    console.log(`Received request to delete colony with ID: ${id}`);
-    const colony = await Colony.findByIdAndDelete(id);
-    if (!colony) {
-      return res.status(404).json({ message: 'Colony not found' });
-    }
-    // Optionally, delete associated players
-    await Player.deleteMany({ colony: id });
-    res.status(200).json({ message: 'Colony and associated players deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting colony:', error);
-    res.status(500).json({ error: 'Failed to delete colony' });
-  }
-};
-
 // Handle colony leader elections
 const handleElections = async (req, res) => {
   const { colonyId } = req.params;
@@ -156,9 +108,14 @@ const handleElections = async (req, res) => {
   }
 
   try {
+    console.log(`Received POST request for /${colonyId}/elections`);
     const colony = await Colony.findById(colonyId).populate('players.player');
     if (!colony) {
       return res.status(404).json({ message: 'Colony not found' });
+    }
+
+    if (!colony.players || colony.players.length === 0) {
+      return res.status(400).json({ message: 'No players in colony' });
     }
 
     const adultPlayers = colony.players.filter(player => player.age >= 18);
@@ -174,15 +131,23 @@ const handleElections = async (req, res) => {
       });
     });
 
+    let newLeaderId;
     if (Object.keys(votes).length === 0) {
-      return res.status(400).json({ message: 'No votes cast' });
+      // If no votes are cast, choose the oldest player as the leader
+      const oldestPlayer = adultPlayers.reduce((oldest, player) => {
+        return (player.age > oldest.age) ? player : oldest;
+      }, adultPlayers[0]);
+      newLeaderId = oldestPlayer._id;
+      console.log(`No votes cast. Oldest player ${newLeaderId} selected as leader.`);
+    } else {
+      newLeaderId = Object.keys(votes).reduce((a, b) => (votes[a] > votes[b] ? a : b));
+      console.log(`New leader elected for colony ${colonyId}: ${newLeaderId}`);
     }
 
-    const newLeaderId = Object.keys(votes).reduce((a, b) => (votes[a] > votes[b] ? a : b));
     colony.leader = newLeaderId;
+    colony.yearsTillElection = 4; // Reset years till next election
     await colony.save();
 
-    console.log(`New leader elected for colony ${colonyId}: ${newLeaderId}`);
     res.status(200).json({ message: 'Elections completed successfully', newLeaderId });
   } catch (error) {
     console.error('Error handling elections:', error);
@@ -190,7 +155,58 @@ const handleElections = async (req, res) => {
   }
 };
 
-// Fetch candidates for elections
+// Get a colony by ID
+const getColony = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const colony = await Colony.findById(id).populate('players.player');
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+    res.status(200).json({ colony });
+  } catch (error) {
+    console.error('Error fetching colony:', error);
+    res.status(500).json({ message: 'Failed to fetch colony' });
+  }
+};
+
+// Update a colony by ID
+const updateColony = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const colony = await Colony.findByIdAndUpdate(id, updateData, { new: true }).populate('players.player');
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+    res.status(200).json({ colony });
+  } catch (error) {
+    console.error('Error updating colony:', error);
+    res.status(500).json({ message: 'Failed to update colony' });
+  }
+};
+
+// Delete a colony by ID
+const deleteColony = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const colony = await Colony.findByIdAndDelete(id);
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+    // Optionally, delete associated players
+    await Player.deleteMany({ colony: id });
+    res.status(200).json({ message: 'Colony and associated players deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting colony:', error);
+    res.status(500).json({ message: 'Failed to delete colony' });
+  }
+};
+
+// Get candidates for elections
 const getCandidates = async (req, res) => {
   const { colonyId } = req.params;
 
@@ -208,7 +224,7 @@ const getCandidates = async (req, res) => {
     res.status(200).json({ candidates });
   } catch (error) {
     console.error('Error fetching candidates:', error);
-    res.status(500).json({ error: 'Failed to fetch candidates' });
+    res.status(500).json({ message: 'Failed to fetch candidates' });
   }
 };
 
@@ -251,7 +267,7 @@ const castVote = async (req, res) => {
     res.status(200).json({ message: 'Vote cast successfully' });
   } catch (error) {
     console.error('Error casting vote:', error);
-    res.status(500).json({ error: 'Failed to cast vote' });
+    res.status(500).json({ message: 'Failed to cast vote' });
   }
 };
 
