@@ -10,6 +10,7 @@ import ProfileSection from './ProfileSection';
 import RelationshipsSection from './RelationshipsSection';
 import ActivitiesSection from './ActivitiesSection';
 import AssetsSection from './AssetsSection';
+import AgeUpSummaryPopup from './AgeUpSummaryPopup';
 import axios from 'axios';
 
 const GamePage = () => {
@@ -19,6 +20,7 @@ const GamePage = () => {
   const [players, setPlayers] = useState([]);
   const [mainPlayer, setMainPlayer] = useState(null);
   const [activeSection, setActiveSection] = useState('Profile');
+  const [summary, setSummary] = useState(null);
 
   // Fetch the game details on component mount
   useEffect(() => {
@@ -50,7 +52,7 @@ const GamePage = () => {
         console.log('Fetched colony:', data.colony);
         setColony(data.colony);
         setPlayers(data.colony.players);
-        identifyMainPlayer(data.colony.players);
+        identifyMainPlayer(data.colony._id);
       } else {
         console.error('Colony not found');
       }
@@ -59,13 +61,29 @@ const GamePage = () => {
     }
   };
 
-  const identifyMainPlayer = async (players) => {
-    const mainPlayerData = await Promise.all(players.map(async (player) => {
-      const response = await fetch(`http://localhost:5000/player/${player.player._id}`);
-      return response.json();
-    }));
-    const mainPlayer = mainPlayerData.find(player => player.mainPlayer);
-    setMainPlayer(mainPlayer);
+  const identifyMainPlayer = async (colonyId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/player/main/${colonyId}`);
+      const main = response.data.mainPlayer;
+      if (main) {
+        console.log('Found main player:', main.name);
+        setMainPlayer(main);
+      } else {
+        console.error('No main player found');
+      }
+    } catch (error) {
+      console.error('Error identifying main player:', error);
+    }
+  };
+
+  const handleAgeUp = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/ageUpColonyMembers', { colonyId: colony._id });
+      setSummary(response.data.summary);
+      fetchColony(colony._id); // Fetch updated colony data
+    } catch (error) {
+      console.error('Error aging up colony members:', error);
+    }
   };
 
   const getProgressBarColor = (value) => {
@@ -83,22 +101,6 @@ const GamePage = () => {
       }
       return updatedPlayer;
     });
-  };
-
-  const handleAgeUp = async () => {
-    console.log('handleAgeUp called');
-    try {
-      const response = await axios.post('http://localhost:5000/api/ageup');
-      console.log('Age up response:', response);
-      alert('All colony members have aged up by one year!');
-      // Refetch the updated player data
-      const updatedResponse = await fetch(`http://localhost:5000/player/${mainPlayer._id}`);
-      const updatedPlayer = await updatedResponse.json();
-      setMainPlayer(updatedPlayer);
-      setActiveSection('Profile');
-    } catch (error) {
-      console.error('Error aging up colony members:', error);
-    }
   };
 
   const handleRetire = async (destination) => {
@@ -169,6 +171,7 @@ const GamePage = () => {
         {renderSection()}
         <div className="age-up-button-container" style={{ textAlign: 'center', marginTop: '20px' }}>
           <button className="age-up-button" onClick={handleAgeUp}>Age Up</button>
+          {summary && <AgeUpSummaryPopup summary={summary} onClose={() => setSummary(null)} />}
           {mainPlayer && mainPlayer.age >= 60 && (
             <>
               <button className="retire-button" onClick={() => handleRetire('earth')}>Retire to Earth</button>

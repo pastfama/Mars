@@ -56,44 +56,6 @@ const createColony = async (req, res) => {
       players.push(player);
     }
 
-    // Create relationships
-    for (const player of players) {
-      player.relationships = players.filter(p => p._id !== player._id).map(p => ({
-        player: p._id,
-        relationshipType: 'neutral',
-        trustLevel: 50,
-      }));
-      await player.save();
-    }
-
-    // Set family relationships
-    mainPlayer.parents = [father._id, mother._id];
-    await mainPlayer.save();
-
-    father.relationships.push({
-      player: mother._id,
-      relationshipType: 'family',
-      trustLevel: 80,
-    });
-    father.relationships.push({
-      player: mainPlayer._id,
-      relationshipType: 'family',
-      trustLevel: 100,
-    });
-    await father.save();
-
-    mother.relationships.push({
-      player: father._id,
-      relationshipType: 'family',
-      trustLevel: 80,
-    });
-    mother.relationships.push({
-      player: mainPlayer._id,
-      relationshipType: 'family',
-      trustLevel: 100,
-    });
-    await mother.save();
-
     // Create a new colony and associate it with the players and game
     const newColony = new Colony({
       colonyId: uuidv4(), // Generate a UUID for colonyId
@@ -106,6 +68,11 @@ const createColony = async (req, res) => {
     // Save the colony
     await newColony.save();
 
+    for (const player of players) {
+      player.colony = newColony._id;
+      await player.save();
+    }
+
     console.log('Created colony:', newColony);
     res.status(201).json({ colony: newColony });
   } catch (error) {
@@ -117,25 +84,17 @@ const createColony = async (req, res) => {
 // Get a colony by ID
 const getColony = async (req, res) => {
   const { id } = req.params;
-  
+
   try {
     console.log(`Received request to fetch colony with ID: ${id}`);
-    
-    // Log the query being made
-    console.log(`Querying database for colony with ID: ${id}`);
-    const colony = await Colony.findOne({ colonyId: id }).populate('players.player').populate('leader');
-    
-    // Log the result of the query
+    const colony = await Colony.findById(id).populate('players.player');
     if (!colony) {
-      console.error(`Colony with ID ${id} not found`);
       return res.status(404).json({ message: 'Colony not found' });
     }
-    
-    console.log(`Fetched colony: ${JSON.stringify(colony)}`);
     res.status(200).json({ colony });
   } catch (error) {
-    console.error('Error retrieving colony:', error);
-    res.status(500).json({ message: 'Failed to retrieve colony' });
+    console.error('Error fetching colony:', error);
+    res.status(500).json({ error: 'Failed to fetch colony' });
   }
 };
 

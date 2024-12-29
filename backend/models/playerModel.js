@@ -52,6 +52,9 @@ const playerSchema = new mongoose.Schema({
   mainPlayer: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  deceased: { type: Boolean, default: false },
+  causeOfDeath: { type: String, default: null },
+  colony: { type: String, default: 'Mars Colony' },
 });
 
 // Middleware to update `updatedAt` before save

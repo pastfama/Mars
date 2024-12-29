@@ -1,13 +1,7 @@
 const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
 
 // Define the Colony schema
 const colonySchema = new mongoose.Schema({
-  colonyId: { 
-    type: String, 
-    unique: true, 
-    default: uuidv4 // Generate a UUID for colonyId
-  },
   name: {
     type: String,
     required: true,
@@ -54,23 +48,7 @@ const colonySchema = new mongoose.Schema({
       medical: { type: Number, default: 0 },
     },
   }],
-  leader: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', default: null }, // Optional: Leader of the colony
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date, // Optional: Track when the colony was last updated
-    default: Date.now,
-  },
-});
+  leader: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', default: null },
+}, { timestamps: true });
 
-// Middleware to update `updatedAt` before save (optional)
-colonySchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
-
-const Colony = mongoose.model('Colony', colonySchema);
-
-module.exports = Colony;
+module.exports = mongoose.model('Colony', colonySchema);

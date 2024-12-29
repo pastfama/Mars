@@ -1,18 +1,14 @@
 // routes/playerRoutes.js
 const express = require('express');
+const { createPlayer, getPlayerById, updatePlayer, deletePlayer, ageUpColonyMembers, retireColonyMembers, getMainPlayerByColonyId } = require('../controllers/playerController');
 const router = express.Router();
-const playerController = require('../controllers/playerController');
 
-// POST: Create a new player
-router.post('/new', playerController.createPlayer);
-
-// GET: Get player details by ID
-router.get('/:id', playerController.getPlayerById);
-
-// PUT: Update player information
-router.put('/:id', playerController.updatePlayer);
-
-// DELETE: Delete player by ID
-router.delete('/:id', playerController.deletePlayer);
+router.post('/', createPlayer);
+router.get('/:id', getPlayerById);
+router.put('/:id', updatePlayer);
+router.delete('/:id', deletePlayer);
+router.post('/ageUpColonyMembers', ageUpColonyMembers);
+router.post('/retireColonyMembers', retireColonyMembers);
+router.get('/main/:colonyId', getMainPlayerByColonyId);
 
 module.exports = router;
