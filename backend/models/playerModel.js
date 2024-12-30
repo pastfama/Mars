@@ -3,7 +3,15 @@ const { v4: uuidv4 } = require('uuid');
 
 const relationshipSchema = new mongoose.Schema({
   player: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', required: true },
-  relationshipType: { type: String, enum: ['parent', 'sibling', 'relative', 'friend', 'father', 'mother'], required: true },
+  relationshipType: { 
+    type: String, 
+    enum: [
+      'parent', 'sibling', 'relative', 'friend', 'enemy', 'father', 'mother', 
+      'grandfather', 'grandmother', 'greatgrandfather', 'greatgrandmother',
+      'uncle', 'aunt', 'cousin', 'nephew', 'niece', 'colonist'
+    ], 
+    required: true 
+  },
   trustLevel: { type: Number, required: true, min: 0, max: 100, default: 50 },
 });
 
