@@ -77,9 +77,10 @@ const createGame = async (req, res) => {
     const colony = new Colony({
       name: colonyName,
       players: players.map(player => ({ player: player._id })),
-      yearsTillElection: 4, // Set years till next election to 4
+      yearsTillElection: 4, // Ensure this field is set correctly
     });
     await colony.save();
+    console.log('Colony created:', colony); // Add this line to log the created colony
 
     // Update players with colony reference
     for (const player of players) {

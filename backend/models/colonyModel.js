@@ -49,6 +49,7 @@ const colonySchema = new mongoose.Schema({
     },
   }],
   leader: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', default: null },
+  yearsTillElection: { type: Number, required: true, default: 4 }, // Ensure this field is correctly defined
 }, { timestamps: true });
 
 module.exports = mongoose.model('Colony', colonySchema);
