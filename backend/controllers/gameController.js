@@ -77,7 +77,7 @@ const createGame = async (req, res) => {
     const colony = new Colony({
       name: colonyName,
       players: players.map(player => ({ player: player._id })),
-      yearsTillElection: 0, // Set years till next election to 0
+      yearsTillElection: 4, // Set years till next election to 4
     });
     await colony.save();
 
@@ -167,7 +167,12 @@ const deleteGame = async (req, res) => {
     if (!game) {
       return res.status(404).json({ message: 'Game not found' });
     }
-    res.status(200).json({ message: 'Game deleted successfully' });
+
+    // Delete associated colony and players
+    await Colony.findByIdAndDelete(game.colony);
+    await Player.deleteMany({ colony: game.colony });
+
+    res.status(200).json({ message: 'Game, associated colony, and players deleted successfully' });
   } catch (error) {
     console.error('Error deleting game:', error);
     res.status(500).json({ message: 'Failed to delete game' });
