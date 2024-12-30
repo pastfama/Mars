@@ -1,5 +1,5 @@
 const express = require('express');
-const { createColony, getColony, updateColony, deleteColony, handleElections, getCandidates, castVote, checkElectionYear } = require('../controllers/colonyController');
+const { createColony, getColony, updateColony, deleteColony, handleElections, getCandidates, castVote, checkElectionYear, getColonyById } = require('../controllers/colonyController');
 const router = express.Router();
 
 // Middleware to log request details
@@ -19,7 +19,7 @@ router.use(logRequestDetails);
 router.post('/', createColony);
 
 // Route to get a colony by ID
-router.get('/:id', getColony);
+router.get('/:id', getColonyById);
 
 // Route to update a colony by ID
 router.put('/:id', updateColony);

@@ -15,6 +15,11 @@ const AssetsSection = ({ colony }) => {
           </li>
         ))}
       </ul>
+      <h2>Colony Information</h2>
+      <ul>
+        <li>Current Leader: {colony.leader ? colony.leader.name : 'No leader assigned'}</li>
+        <li>Years Till Election: {colony.yearsTillElection}</li>
+      </ul>
     </div>
   );
 };

@@ -327,6 +327,21 @@ const castVote = async (req, res) => {
   }
 };
 
+const getColonyById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const colony = await Colony.findById(id).populate('leader');
+    if (!colony) {
+      return res.status(404).json({ message: 'Colony not found' });
+    }
+    res.status(200).json({ colony });
+  } catch (error) {
+    console.error('Error fetching colony:', error);
+    res.status(500).json({ message: 'Failed to fetch colony' });
+  }
+};
+
 module.exports = {
   createColony,
   getColony,
@@ -336,4 +351,5 @@ module.exports = {
   getCandidates,
   castVote,
   checkElectionYear,
+  getColonyById,
 };
