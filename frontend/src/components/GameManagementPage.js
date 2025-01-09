@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/GameManagementPage.css';
+import config from '../config'; // Import config
 
 const GameManagementPage = () => {
   const [games, setGames] = useState([]);
@@ -7,7 +8,7 @@ const GameManagementPage = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch('http://localhost:5000/game');
+        const response = await fetch(`${config.apiBaseUri}/game`); // Use apiBaseUri
         if (response.ok) {
           const data = await response.json();
           setGames(data.games);  // Assuming the API returns { games: [...] }
@@ -24,7 +25,7 @@ const GameManagementPage = () => {
 
   const handleDeleteGame = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/game/${id}`, {
+      const response = await fetch(`${config.apiBaseUri}/game/${id}`, { // Use apiBaseUri
         method: 'DELETE',
       });
       if (response.ok) {

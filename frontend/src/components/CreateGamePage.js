@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Spinner, Container, Row, Col, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/CreateGamePage.css';
+import config from '../config'; // Import config
 
 const CreateGamePage = () => {
   const [name, setName] = useState('Default Game Name');
@@ -24,7 +25,7 @@ const CreateGamePage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/game', {
+      const response = await fetch(`${config.apiBaseUri}/game`, { // Use apiBaseUri
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newGame),

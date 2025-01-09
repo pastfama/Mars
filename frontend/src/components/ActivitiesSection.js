@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import '../styles/ActivitiesSection.css'; // Update this path if necessary
+import config from '../config'; // Import config
 
 const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, isVotingYear }) => {
   const [activities, setActivities] = useState([]);
@@ -31,7 +32,7 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, is
 
   const fetchActivities = async (lifeStage) => {
     try {
-      const response = await fetch(`http://localhost:5000/activities/${lifeStage}`);
+      const response = await fetch(`${config.apiBaseUri}/activities/${lifeStage}`); // Use apiBaseUri
       const data = await response.json();
       setActivities(data.activities);
     } catch (error) {
@@ -41,7 +42,7 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, is
 
   const fetchCandidates = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/colony/${mainPlayer.colony}/candidates`);
+      const response = await axios.get(`${config.apiBaseUri}/colony/${mainPlayer.colony}/candidates`); // Use apiBaseUri
       setCandidates(response.data.candidates);
     } catch (error) {
       console.error('Error fetching candidates:', error);
@@ -62,7 +63,7 @@ const ActivitiesSection = ({ mainPlayer, updatePlayerStats, setActiveSection, is
 
   const handleVote = async () => {
     try {
-      await axios.post(`http://localhost:5000/colony/${mainPlayer.colony}/vote`, { voterId: mainPlayer._id, candidateId: selectedCandidate });
+      await axios.post(`${config.apiBaseUri}/colony/${mainPlayer.colony}/vote`, { voterId: mainPlayer._id, candidateId: selectedCandidate }); // Use apiBaseUri
       alert('Vote cast successfully!');
     } catch (error) {
       console.error('Error casting vote:', error);

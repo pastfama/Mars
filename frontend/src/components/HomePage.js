@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import config from '../config'; // Import config
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -14,7 +15,7 @@ const HomePage = () => {
 
   const fetchGames = async () => {
     try {
-      const response = await fetch('http://localhost:5000/game'); // Adjust the URL if needed
+      const response = await fetch(`${config.apiBaseUri}/game`); // Use apiBaseUri
       const data = await response.json();
       setGames(data.games || []);
     } catch (error) {
@@ -25,7 +26,7 @@ const HomePage = () => {
   const handleGetGameById = async () => {
     if (gameId) {
       try {
-        const response = await fetch(`http://localhost:5000/game/${gameId}`); // Fetch single game by ID
+        const response = await fetch(`${config.apiBaseUri}/game/${gameId}`); // Use apiBaseUri
         const data = await response.json();
         alert(`Game fetched: ${JSON.stringify(data.game)}`);
       } catch (error) {

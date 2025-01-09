@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AgeUpSummaryPopup from './AgeUpSummaryPopup';
 import axios from 'axios';
+import config from '../config'; // Import config
 
 const AgeUpButtonContainer = ({ handleAgeUp, loading, summary, mainPlayer, handleRetire, setSummary, handleElections }) => {
   const [isVotingYear, setIsVotingYear] = useState(false);
@@ -13,7 +14,7 @@ const AgeUpButtonContainer = ({ handleAgeUp, loading, summary, mainPlayer, handl
 
   const fetchVotingYearStatus = async (colonyId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/colony/${colonyId}`);
+      const response = await axios.get(`${config.apiBaseUri}/colony/${colonyId}`); // Use apiBaseUri
       const colony = response.data.colony;
       if (colony) {
         setIsVotingYear(colony.yearsTillElection === 0);

@@ -8,6 +8,7 @@ import RelationshipsSection from './RelationshipsSection';
 import ActivitiesSection from './ActivitiesSection';
 import AssetsSection from './AssetsSection';
 import axios from 'axios';
+import config from '../config'; // Import config
 
 const GamePage = () => {
   const { id } = useParams(); // Get game ID from the URL
@@ -27,7 +28,7 @@ const GamePage = () => {
 
   const fetchGame = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/game/${id}`); // Fetch game by ID
+      const response = await fetch(`${config.apiBaseUri}/game/${id}`); // Use apiBaseUri
       const data = await response.json();
       if (data.game) {
         console.log('Fetched game:', data.game);
@@ -44,7 +45,7 @@ const GamePage = () => {
   const fetchColony = async (colonyId) => {
     try {
       console.log('Fetching colony with ID:', colonyId);
-      const response = await fetch(`http://localhost:5000/colony/${colonyId}`); // Fetch colony by ID
+      const response = await fetch(`${config.apiBaseUri}/colony/${colonyId}`); // Use apiBaseUri
       const data = await response.json();
       if (data.colony) {
         console.log('Fetched colony:', data.colony);
@@ -62,7 +63,7 @@ const GamePage = () => {
 
   const identifyMainPlayer = async (colonyId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/players/main/${colonyId}`);
+      const response = await axios.get(`${config.apiBaseUri}/players/main/${colonyId}`); // Use apiBaseUri
       const main = response.data.mainPlayer;
       if (main) {
         console.log('Found main player:', main.name);
@@ -78,13 +79,23 @@ const GamePage = () => {
   const handleAgeUp = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/players/ageUpColonyMembers', { colonyId: colony._id });
+      const response = await axios.post(`${config.apiBaseUri}/players/ageUpColonyMembers`, { colonyId: colony._id }); // Use apiBaseUri
       setSummary(response.data.summary);
       fetchColony(colony._id); // Fetch updated colony data
     } catch (error) {
       console.error('Error aging up colony members:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleElections = async (colonyId) => {
+    try {
+      const response = await axios.post(`${config.apiBaseUri}/colony/${colonyId}/elections`); // Use apiBaseUri
+      alert('Elections held successfully!');
+      fetchColony(colonyId); // Fetch updated colony data
+    } catch (error) {
+      console.error('Error holding elections:', error);
     }
   };
 
@@ -108,7 +119,7 @@ const GamePage = () => {
   const handleRetire = async (destination) => {
     console.log('handleRetire called');
     try {
-      const response = await axios.post('http://localhost:5000/api/retire', { destination });
+      const response = await axios.post(`${config.apiBaseUri}/api/retire`, { destination }); // Use apiBaseUri
       console.log('Retire response:', response);
       alert(`Colony members have been retired to ${destination}!`);
       // Refetch the updated colony data
@@ -174,6 +185,7 @@ const GamePage = () => {
           mainPlayer={mainPlayer}
           handleRetire={handleRetire}
           setSummary={setSummary} // Pass setSummary to AgeUpButtonContainer
+          handleElections={handleElections} // Pass handleElections to AgeUpButtonContainer
         />
       </div>
     </div>
