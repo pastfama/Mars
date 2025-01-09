@@ -1,6 +1,8 @@
 const logger = require('../utils/logger');
 const Player = require('../models/playerModel'); // Assuming you have a Player model set up
+const Colony = require('../models/colonyModel'); // Add this line
 const mongoose = require('mongoose');
+const { handleElections, updateColony } = require('./colonyController'); // Add this line
 
 // POST: Create a new player
 const createPlayer = async (req, res) => {
@@ -109,6 +111,20 @@ const ageUpColonyMembers = async (req, res) => {
       await player.save();
     }
 
+    // Deduct 1 year from YearsTillElection in colony
+    const colony = await Colony.findById(req.body.colonyId);
+    if (colony) {
+      colony.yearsTillElection -= 1;
+      if (colony.yearsTillElection <= 0) {
+        // Trigger election logic here
+        logger.logDebug('Triggering election for colony', { colonyId: colony._id });
+        await handleElections({ params: { colonyId: colony._id } }, res);
+        return; // Exit after handling elections
+      } else {
+        await updateColony({ params: { id: colony._id }, body: { yearsTillElection: colony.yearsTillElection } }, res);
+      }
+    }
+
     // Event: New players arrive from Earth
     const newPlayerCount = Math.floor(Math.random() * 3) + 1; // Random number between 1 and 3
 
@@ -133,7 +149,9 @@ const ageUpColonyMembers = async (req, res) => {
     res.status(200).json({ message: 'All colony members aged up successfully and new players arrived', summary });
   } catch (error) {
     logger.logError('Error aging up colony members', error);
-    res.status(500).json({ error: 'Failed to age up colony members' });
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Failed to age up colony members' });
+    }
   }
 };
 
